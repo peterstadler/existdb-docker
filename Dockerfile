@@ -12,7 +12,6 @@ RUN addgroup -S wegajetty \
 
 ARG VERSION
 ARG MAX_MEMORY
-ARG WEGA_WEBAPP_ENV
 
 ENV VERSION ${VERSION:-3.3.0}
 ENV EXIST_URL https://dl.bintray.com/existdb/releases/eXist-db-setup-${VERSION}.jar
