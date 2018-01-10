@@ -83,7 +83,7 @@
     
     <!--
         +++++++++++++++++++++++++++++++++++++++++
-        $exist.home$/tools/jetty/etc/jetty.xml
+        $exist.home$/tools/jetty/webapps/exist-webapp-context.xml
         +++++++++++++++++++++++++++++++++++++++++
     -->
     <xsl:template match="Set[@name='contextPath' and $context_path]">
@@ -121,6 +121,20 @@
             <xsl:element name="param-value" namespace="http://xmlns.jcp.org/xml/ns/javaee">
                 <xsl:text>true</xsl:text>
             </xsl:element>
+        </xsl:copy>
+    </xsl:template>
+    
+    <!-- 
+        +++++++++++++++++++++++++++++++++++++++++
+        $exist.home$/log4j2.xml
+        +++++++++++++++++++++++++++++++++++++++++
+    -->
+    
+    <xsl:template match="Logger[@name='wega.webapp'][$env ne 'production']">
+        <xsl:copy>
+            <xsl:apply-templates select="@* except @level"/>
+            <xsl:attribute name="level">trace</xsl:attribute>
+            <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
     
