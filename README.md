@@ -17,7 +17,7 @@ docker build -t existdb --build-arg VERSION=3.6.0 .
 ## available parameters
 * **VERSION**: The eXist version to use. Defaults to 3.3.0
 * **MAX_MEMORY**: The max memory setting for eXist. Defaults to 2048 (megabyte). 
-   This can be overwritten when starting a container by adding e.g. `-e JAVA_OPTIONS="Xmx=1024m"`    
+   This can be overwritten when starting a container by adding e.g. `-e JAVA_OPTIONS="-Xmx1024m"`    
 
 # How to run
 ```
