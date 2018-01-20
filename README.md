@@ -40,6 +40,11 @@ docker run --rm -it \
     which means you'll find eXist at `http://localhost:8080/exist/` but you 
     may change this to simply `/` and eXist will listen at `http://localhost:8080/`
 
+## setting the admin password
+The admin password is read from a file secret.txt at ${EXIST_HOME} in the Docker container. 
+You can mount your password file at this location via `-v /full/path/to/your/secret.txt:/opt/exist/secret.txt`; 
+if you don't provide a password file, a random password will be generated and written to this file (within the container).  
+
 # License
 This Dockerfile is licensed under a MIT license.
 

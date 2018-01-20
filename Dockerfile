@@ -2,7 +2,7 @@
 #
 # adjusted from https://github.com/jurrian/existdb-alpine
 
-FROM java:8-jre-alpine
+FROM openjdk:8-jre-alpine
 MAINTAINER Peter Stadler
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
@@ -29,25 +29,20 @@ ADD ${SAXON_URL} /tmp/saxon.zip
 #COPY *.jar /tmp/exist.jar
 #COPY SaxonHE9-6-0-7J.zip /tmp/saxon.zip
 
-RUN apk --update add bash \
+RUN apk --update add bash pwgen \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
-    
     # install eXist-db
     # ending with true because java somehow returns with a non-zero after succesfull installing
     && java -jar "/tmp/exist.jar" -options "/tmp/options.txt" || true \ 
     && rm -f "/tmp/exist.jar" "/tmp/options.txt" \
-    
     # prefix java command with exec to force java being process 1 and receiving docker signals
     && sed -i 's/^${JAVA_RUN/exec ${JAVA_RUN/'  ${EXIST_HOME}/bin/startup.sh \
-    
     # alpine has no locale binary, this will fix that
     && printf "#!/bin/sh\necho $LANG" > /usr/bin/locale \
     && chmod +x /usr/bin/locale \
-    
     # remove portal webapp
     && rm -Rf ${EXIST_HOME}/tools/jetty/webapps/portal \
-    
     # install saxon
     && mkdir -p /usr/share/java/saxon \
     && unzip /tmp/saxon.zip -d /usr/share/java/saxon \
@@ -76,6 +71,8 @@ RUN chown -R wegajetty:wegajetty ${EXIST_HOME} \
 # switching to user wegajetty for further copying 
 # and running exist-db 
 USER wegajetty:wegajetty
+
+RUN touch secret.txt
 
 VOLUME ["${EXIST_HOME}/webapp/WEB-INF/data","${EXIST_HOME}/webapp/WEB-INF/logs","${EXIST_HOME}/tools/jetty/logs"]
 
