@@ -29,7 +29,7 @@ ADD ${SAXON_URL} /tmp/saxon.zip
 #COPY *.jar /tmp/exist.jar
 #COPY SaxonHE9-6-0-7J.zip /tmp/saxon.zip
 
-RUN apk --update add bash pwgen \
+RUN apk --update add bash pwgen curl \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
     # install eXist-db
@@ -75,6 +75,10 @@ USER wegajetty:wegajetty
 RUN touch secret.txt
 
 VOLUME ["${EXIST_HOME}/webapp/WEB-INF/data","${EXIST_HOME}/webapp/WEB-INF/logs","${EXIST_HOME}/tools/jetty/logs"]
+
+
+HEALTHCHECK --interval=60s --timeout=5s \
+  CMD curl -LIf http://localhost:8080${EXIST_CONTEXT_PATH} || exit 1
 
 CMD ["./entrypoint.sh"]
 
