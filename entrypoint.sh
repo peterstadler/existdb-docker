@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAXON="java ${JAVA_OPTIONS} -jar /usr/share/java/saxon/saxon9he.jar env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
+SAXON="java ${JAVA_OPTIONS} -jar /usr/share/java/saxon/saxon9he.jar env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
 
 # try to read the admin password from 'secret.txt' or generate a random one 
 if [ -s ${EXIST_HOME}/secret.txt ]

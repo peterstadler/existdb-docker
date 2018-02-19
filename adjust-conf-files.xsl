@@ -14,6 +14,7 @@
     
     <xsl:param name="env"/>
     <xsl:param name="context_path"/>
+    <xsl:param name="default_app_path"/>
     
     <!-- needed servlets -->
     <!-- wird das ResourceServlet wirklich benötigt? Ja, für Dashboard etc-->
@@ -73,10 +74,17 @@
     <xsl:template match="exist:root">
         <xsl:choose>
             <xsl:when test="@pattern = '/apps'">
-                <root pattern="/apps" path="xmldb:exist:///db/apps" xmlns="http://exist.sourceforge.net/NS/exist"/>
+                <xsl:copy>
+                    <xsl:apply-templates select="@*"/>
+                </xsl:copy>
             </xsl:when>
-            <xsl:when test="@pattern = '.*'">
-                <root pattern=".*" path="xmldb:exist:///db/apps/WeGA-WebApp" xmlns="http://exist.sourceforge.net/NS/exist"/>
+            <xsl:when test="@pattern = '.*' and not($default_app_path)">
+                <xsl:copy>
+                    <xsl:apply-templates select="@*"/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:when test="@pattern = '.*' and $default_app_path">
+                <root pattern=".*" path="{$default_app_path}" xmlns="http://exist.sourceforge.net/NS/exist"/>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
