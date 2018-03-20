@@ -72,8 +72,6 @@ RUN chown -R wegajetty:wegajetty ${EXIST_HOME} \
 # and running exist-db 
 USER wegajetty:wegajetty
 
-RUN touch secret.txt
-
 VOLUME ["${EXIST_HOME}/webapp/WEB-INF/data","${EXIST_HOME}/webapp/WEB-INF/logs","${EXIST_HOME}/tools/jetty/logs"]
 
 
