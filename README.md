@@ -44,8 +44,8 @@ docker run --rm -it \
     available at `/apps/`).    
 
 ## setting the admin password
-The admin password is read from a file secret.txt at ${EXIST_HOME} in the Docker container. 
-You can mount your password file at this location via `-v /full/path/to/your/secret.txt:/opt/exist/secret.txt`; 
+The admin password is read from a file secret.txt at `${EXIST_HOME}/webapp/WEB-INF/data/secret.txt` in the Docker container. 
+You can mount your password file at this location via `-v /full/path/to/your/secret.txt:/opt/exist/webapp/WEB-INF/data/secret.txt`; 
 if you don't provide a password file, a random password will be generated and written to this file (within the container).  
 
 # License

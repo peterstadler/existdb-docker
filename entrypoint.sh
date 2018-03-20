@@ -2,16 +2,6 @@
 
 SAXON="java ${JAVA_OPTIONS} -jar /usr/share/java/saxon/saxon9he.jar env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
 
-# try to read the admin password from 'secret.txt' or generate a random one 
-if [ -s ${EXIST_HOME}/secret.txt ]
-then
-    SECRET=`cat ${EXIST_HOME}/secret.txt`
-else 
-    # generate a random password and output it to a file
-    SECRET=`pwgen 12 -y`
-    echo ${SECRET} > ${EXIST_HOME}/secret.txt
-fi
-
 # adjusting configuration files
 ${SAXON} -s:${EXIST_HOME}/conf.xml -o:/tmp/conf.xml 
 ${SAXON} -s:${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml -o:/tmp/exist-webapp-context.xml
@@ -26,13 +16,44 @@ mv /tmp/controller-config.xml ${EXIST_HOME}/webapp/WEB-INF/controller-config.xml
 mv /tmp/web.xml ${EXIST_HOME}/webapp/WEB-INF/web.xml
 mv /tmp/log4j2.xml ${EXIST_HOME}/log4j2.xml
 
-# setting the eXistdb admin password
-/opt/exist/bin/client.sh -l -s -u admin -P \$adminPasswd << EOF 
+# function for setting the existdb password
+function set_passwd {
+${EXIST_HOME}/bin/client.sh -l -s -u admin -P \$adminPasswd << EOF 
 passwd admin
-${SECRET}
-${SECRET}
+$1
+$1
 quit
 EOF
+echo "do not delete" > ${EXIST_HOME}/webapp/WEB-INF/data/secret_set
+}
+
+# try to read the admin password from '${EXIST_HOME}/webapp/WEB-INF/data/secret.txt' or generate a random one 
+# setting ${EXIST_HOME}/webapp/WEB-INF/data/secret_set as a flag for a set password
+if [ -s ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt ] && [ -s ${EXIST_HOME}/webapp/WEB-INF/data/secret_set ]
+then
+    SECRET=`cat ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt`
+    echo "***********************************************************************"
+    echo "password already set, see ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt"
+    echo "***********************************************************************"
+elif [ -s ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt ]
+then
+    # read the password from a file
+    SECRET=`cat ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt` 
+    echo "********************************"
+    echo "setting password to your secret"
+    echo "********************************"
+    # setting the eXistdb admin password
+    set_passwd ${SECRET}
+else 
+    # generate a random password and output it to a file
+    SECRET=`pwgen 12 -y`
+    echo ${SECRET} > ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt
+    echo "********************************"
+    echo "setting password to ${SECRET}"
+    echo "********************************"
+    # setting the eXistdb admin password
+    set_passwd ${SECRET}
+fi
 
 # starting the database
 exec ${EXIST_HOME}/bin/startup.sh
