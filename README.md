@@ -39,7 +39,7 @@ docker run --rm -it \
 * **EXIST_CONTEXT_PATH**: The eXist context path. Defaults to `/exist`, 
     which means you'll find eXist at `http://localhost:8080/exist/` but you 
     may change this to simply `/` and your default app will repond at `http://localhost:8080/`
-  **EXIST_DEFAULT_APP_PATH**: the database path to your default app, e.g. `xmldb:exist:///db/apps/WeGA-WebApp`.
+*  **EXIST_DEFAULT_APP_PATH**: the database path to your default app, e.g. `xmldb:exist:///db/apps/WeGA-WebApp`.
     This default app will respond directly at the `$EXIST_CONTEXT_PATH` (while all other apps are still 
     available at `/apps/`).    
 
