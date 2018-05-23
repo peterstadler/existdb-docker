@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAXON="java ${JAVA_OPTIONS} -jar /usr/share/java/saxon/saxon9he.jar env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
+SAXON="java ${JAVA_OPTIONS} -jar ${EXIST_HOME}/lib/endorsed/Saxon-HE-9.6.0-7.jar env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
 
 # adjusting configuration files
 ${SAXON} -s:${EXIST_HOME}/conf.xml -o:/tmp/conf.xml 

@@ -15,7 +15,6 @@ ARG MAX_MEMORY
 
 ENV VERSION ${VERSION:-3.3.0}
 ENV EXIST_URL https://dl.bintray.com/existdb/releases/eXist-db-setup-${VERSION}.jar
-ENV SAXON_URL http://downloads.sourceforge.net/project/saxon/Saxon-HE/9.6/SaxonHE9-6-0-7J.zip
 ENV EXIST_HOME /opt/exist
 ENV MAX_MEMORY ${MAX_MEMORY:-2048}
 ENV EXIST_ENV ${EXIST_ENV:-development}
@@ -23,11 +22,9 @@ ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
 
 WORKDIR ${EXIST_HOME}
 
-# download eXist and saxon
+# download eXist
 ADD ${EXIST_URL} /tmp/exist.jar
-ADD ${SAXON_URL} /tmp/saxon.zip
 #COPY *.jar /tmp/exist.jar
-#COPY SaxonHE9-6-0-7J.zip /tmp/saxon.zip
 
 RUN apk --update add bash pwgen curl \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
@@ -42,16 +39,7 @@ RUN apk --update add bash pwgen curl \
     && printf "#!/bin/sh\necho $LANG" > /usr/bin/locale \
     && chmod +x /usr/bin/locale \
     # remove portal webapp
-    && rm -Rf ${EXIST_HOME}/tools/jetty/webapps/portal \
-    # install saxon
-    && mkdir -p /usr/share/java/saxon \
-    && unzip /tmp/saxon.zip -d /usr/share/java/saxon \
-    && rm -rf \ 
-        /usr/share/java/saxon/notices \
-        /usr/share/java/saxon/doc \
-        /usr/share/java/saxon/saxon9-test.jar \ 
-        /usr/share/java/saxon/saxon9-unpack.jar \
-        /tmp/saxon.zip
+    && rm -Rf ${EXIST_HOME}/tools/jetty/webapps/portal
 
 # adding expath packages to the autodeploy directory
 ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.xar ${EXIST_HOME}/autodeploy/ 
