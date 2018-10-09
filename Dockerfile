@@ -64,7 +64,7 @@ VOLUME ["${EXIST_HOME}/webapp/WEB-INF/data","${EXIST_HOME}/webapp/WEB-INF/logs",
 
 
 HEALTHCHECK --interval=60s --timeout=5s \
-  CMD curl -LIf http://localhost:8080${EXIST_CONTEXT_PATH} || exit 1
+  CMD curl -Lf http://localhost:8080${EXIST_CONTEXT_PATH} || exit 1
 
 CMD ["./entrypoint.sh"]
 
