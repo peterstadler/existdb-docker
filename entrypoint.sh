@@ -46,7 +46,7 @@ then
     set_passwd ${SECRET}
 else 
     # generate a random password and output it to a file
-    SECRET=`pwgen 12 -y`
+    SECRET=`pwgen 24 -csn`
     echo ${SECRET} > ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt
     echo "********************************"
     echo "setting password to ${SECRET}"
