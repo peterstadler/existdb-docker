@@ -106,21 +106,30 @@
         $exist.home$/webapp/WEB-INF/web.xml
         +++++++++++++++++++++++++++++++++++++++++
     -->
-    <xsl:template match="webapp:servlet[not(webapp:servlet-name = $production-servlets or $env ne 'production')]"/>
+    <xsl:template match="webapp:servlet[not(
+            webapp:servlet-name = $production-servlets 
+            or $env = 'development' 
+            or (webapp:servlet-name = 'RestXqServlet' and $env = 'restxq'))
+            ]"/>
     
-    <xsl:template match="webapp:servlet-mapping[not(webapp:servlet-name = 'XQueryURLRewrite' or $env ne 'production')]"/>
+    <xsl:template match="webapp:servlet-mapping[not(webapp:servlet-name = 'XQueryURLRewrite' or $env = 'development')]"/>
     
-    <xsl:template match="webapp:filter[$env eq 'production']"/>
+    <!-- for the restxq-only experience we hijack the XQueryURLRewrite servlet-mapping (which defaults to '/*') -->
+    <xsl:template match="webapp:servlet-name[parent::webapp:servlet-mapping][$env = 'restxq']">
+        <xsl:copy>RestXqServlet</xsl:copy>
+    </xsl:template>
     
-    <xsl:template match="webapp:filter-mapping[$env eq 'production']"/>
+    <xsl:template match="webapp:filter[$env ne 'development']"/>
     
-    <xsl:template match="webapp:login-config[$env eq 'production']"/>
+    <xsl:template match="webapp:filter-mapping[$env ne 'development']"/>
     
-    <xsl:template match="webapp:context-param[$env eq 'production']"/>
+    <xsl:template match="webapp:login-config[$env ne 'development']"/>
     
-    <xsl:template match="webapp:listener[$env eq 'production']"/>
+    <xsl:template match="webapp:context-param[$env ne 'development']"/>
     
-    <xsl:template match="webapp:init-param[webapp:param-name = 'hidden' and $env eq 'production']">
+    <xsl:template match="webapp:listener[$env ne 'development']"/>
+    
+    <xsl:template match="webapp:init-param[webapp:param-name = 'hidden' and $env ne 'development']">
         <!-- Deny direct access to the REST interface -->
         <xsl:copy>
             <xsl:element name="param-name" namespace="http://xmlns.jcp.org/xml/ns/javaee">
