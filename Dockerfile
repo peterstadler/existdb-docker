@@ -42,7 +42,7 @@ RUN apk --update add bash pwgen curl \
     && rm -Rf ${EXIST_HOME}/tools/jetty/webapps/portal
 
 # adding expath packages to the autodeploy directory
-ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.xar ${EXIST_HOME}/autodeploy/ 
+ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
 #COPY *.xar ${EXIST_HOME}/autodeploy/
 
 # adding the entrypoint script
