@@ -2,6 +2,9 @@
 
 SAXON="java ${JAVA_OPTIONS} -jar ${EXIST_HOME}/lib/endorsed/Saxon-HE-9.6.0-7.jar env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
 
+# remove DTD reference since the URL is broken
+sed -i 2d ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml
+
 # adjusting configuration files
 ${SAXON} -s:${EXIST_HOME}/conf.xml -o:/tmp/conf.xml 
 ${SAXON} -s:${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml -o:/tmp/exist-webapp-context.xml
