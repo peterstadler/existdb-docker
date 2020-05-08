@@ -44,9 +44,30 @@ docker run --rm -it \
     available at `/apps/`).    
 
 ## setting the admin password
-The admin password is read from a file secret.txt at `${EXIST_HOME}/webapp/WEB-INF/data/secret.txt` in the Docker container. 
-You can mount your password file at this location via `-v /full/path/to/your/secret.txt:/opt/exist/webapp/WEB-INF/data/secret.txt`; 
-if you don't provide a password file, a random password will be generated and written to this file (within the container).  
+The admin password can be supplied via the `$EXISTDB_PASSWORD` environment variable or the equivalent Docker secret `$EXISTDB_PASSWORD_FILE`. 
+If none of these variables are set (or both contain empty values) a random password will be generated and echoed to the logs.  
+
+```
+# docker-compose.yml
+version: "3.6"
+services:
+  existdb:
+    image: stadlerpeter/existdb:latest
+    ports: 
+      - 8080:8080
+    environment: 
+      - EXISTDB_PASSWORD_FILE=/run/secrets/existdb_passwd
+    restart: unless-stopped
+    secrets:
+      - source: existdb_passwd
+    volumes:
+      - existdb_data:/opt/exist/webapp/WEB-INF/data
+secrets:
+  existdb_passwd:
+    file: /local/path/to/password-file
+volumes:
+  existdb_data:
+```  
 
 # License
 This Dockerfile is licensed under a MIT license.

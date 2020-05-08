@@ -27,31 +27,47 @@ $1
 $1
 quit
 EOF
-echo "do not delete" > ${EXIST_HOME}/webapp/WEB-INF/data/secret_set
+echo "do not delete" > ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret
 }
 
-# try to read the admin password from '${EXIST_HOME}/webapp/WEB-INF/data/secret.txt' or generate a random one 
-# setting ${EXIST_HOME}/webapp/WEB-INF/data/secret_set as a flag for a set password
-if [ -s ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt ] && [ -s ${EXIST_HOME}/webapp/WEB-INF/data/secret_set ]
+# now we are setting the admin password
+# if the magic file ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret exists
+# we won't take any action because the password is already set
+if [[ -s ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret ]]
+then 
+    echo "********************"
+    echo "password already set"
+    echo "********************"
+
+# next, try to read the admin password from Docker secrets 
+# if the ${EXISTDB_PASSWORD_FILE} environment variable is set. 
+elif [[ -s ${EXISTDB_PASSWORD_FILE} ]] 
 then
-    SECRET=`cat ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt`
-    echo "***********************************************************************"
-    echo "password already set, see ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt"
-    echo "***********************************************************************"
-elif [ -s ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt ]
-then
-    # read the password from a file
-    SECRET=`cat ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt` 
-    echo "********************************"
-    echo "setting password to your secret"
-    echo "********************************"
+    SECRET=`cat ${EXISTDB_PASSWORD_FILE}`
+    echo "************************************"
+    echo "setting password from Docker secrets"
+    echo "************************************"
     # setting the eXistdb admin password
     set_passwd ${SECRET}
-else 
-    # generate a random password and output it to a file
+
+# next, look for the ${EXISTDB_PASSWORD} environment variable 
+# to set the password 
+elif [[ ${EXISTDB_PASSWORD} ]] && ! [[ -s ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret ]]
+then
+    # read the password from the environment variable ${EXISTDB_PASSWORD}
+    echo "*************************************************"
+    echo "setting password from Docker environment variable"
+    echo "NB: this is less secure than via Docker secrets"
+    echo "*************************************************"
+    # setting the eXistdb admin password
+    set_passwd ${EXISTDB_PASSWORD}
+
+# finally fallback to generating a random password
+else
+    # generate a random password and output it to the logs
     SECRET=`pwgen 24 -csn`
-    echo ${SECRET} > ${EXIST_HOME}/webapp/WEB-INF/data/secret.txt
     echo "********************************"
+    echo "no admin password provided"
     echo "setting password to ${SECRET}"
     echo "********************************"
     # setting the eXistdb admin password
