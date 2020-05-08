@@ -19,7 +19,7 @@ mv /tmp/controller-config.xml ${EXIST_HOME}/webapp/WEB-INF/controller-config.xml
 mv /tmp/web.xml ${EXIST_HOME}/webapp/WEB-INF/web.xml
 mv /tmp/log4j2.xml ${EXIST_HOME}/log4j2.xml
 
-# function for setting the existdb password
+# function for setting the exist password
 function set_passwd {
 ${EXIST_HOME}/bin/client.sh -l -s -u admin -P \$adminPasswd << EOF 
 passwd admin
@@ -40,27 +40,27 @@ then
     echo "********************"
 
 # next, try to read the admin password from Docker secrets 
-# if the ${EXISTDB_PASSWORD_FILE} environment variable is set. 
-elif [[ -s ${EXISTDB_PASSWORD_FILE} ]] 
+# if the ${EXIST_PASSWORD_FILE} environment variable is set. 
+elif [[ -s ${EXIST_PASSWORD_FILE} ]] 
 then
-    SECRET=`cat ${EXISTDB_PASSWORD_FILE}`
+    SECRET=`cat ${EXIST_PASSWORD_FILE}`
     echo "************************************"
     echo "setting password from Docker secrets"
     echo "************************************"
-    # setting the eXistdb admin password
+    # setting the eXist admin password
     set_passwd ${SECRET}
 
-# next, look for the ${EXISTDB_PASSWORD} environment variable 
+# next, look for the ${EXIST_PASSWORD} environment variable 
 # to set the password 
-elif [[ ${EXISTDB_PASSWORD} ]] && ! [[ -s ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret ]]
+elif [[ ${EXIST_PASSWORD} ]] && ! [[ -s ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret ]]
 then
-    # read the password from the environment variable ${EXISTDB_PASSWORD}
+    # read the password from the environment variable ${EXIST_PASSWORD}
     echo "*************************************************"
     echo "setting password from Docker environment variable"
     echo "NB: this is less secure than via Docker secrets"
     echo "*************************************************"
-    # setting the eXistdb admin password
-    set_passwd ${EXISTDB_PASSWORD}
+    # setting the eXist admin password
+    set_passwd ${EXIST_PASSWORD}
 
 # finally fallback to generating a random password
 else
@@ -70,7 +70,7 @@ else
     echo "no admin password provided"
     echo "setting password to ${SECRET}"
     echo "********************************"
-    # setting the eXistdb admin password
+    # setting the eXist admin password
     set_passwd ${SECRET}
 fi
 

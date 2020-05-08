@@ -44,7 +44,7 @@ docker run --rm -it \
     available at `/apps/`).    
 
 ## setting the admin password
-The admin password can be supplied via the `$EXISTDB_PASSWORD` environment variable or the equivalent Docker secret `$EXISTDB_PASSWORD_FILE`. 
+The admin password can be supplied via the `$EXIST_PASSWORD` environment variable or the equivalent Docker secret `$EXIST_PASSWORD_FILE`. 
 If none of these variables are set (or both contain empty values) a random password will be generated and echoed to the logs.  
 
 ```
@@ -56,7 +56,7 @@ services:
     ports: 
       - 8080:8080
     environment: 
-      - EXISTDB_PASSWORD_FILE=/run/secrets/existdb_passwd
+      - EXIST_PASSWORD_FILE=/run/secrets/existdb_passwd
     restart: unless-stopped
     secrets:
       - source: existdb_passwd
