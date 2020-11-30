@@ -13,12 +13,13 @@ RUN addgroup -S wegajetty \
 ARG VERSION
 ARG MAX_MEMORY
 
-ENV VERSION ${VERSION:-4.7.1}
-ENV EXIST_URL https://dl.bintray.com/existdb/releases/eXist-db-setup-${VERSION}.jar
+ENV VERSION ${VERSION:-5.2.0}
+ENV EXIST_URL https://dl.bintray.com/existdb/releases/exist-installer-${VERSION}.jar
 ENV EXIST_HOME /opt/exist
 ENV MAX_MEMORY ${MAX_MEMORY:-2048}
 ENV EXIST_ENV ${EXIST_ENV:-development}
 ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
+ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
 
 WORKDIR ${EXIST_HOME}
 
@@ -29,6 +30,7 @@ ADD ${EXIST_URL} /tmp/exist.jar
 RUN apk --update add bash pwgen curl \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
+    && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \
     # install eXist-db
     # ending with true because java somehow returns with a non-zero after succesfull installing
     && java -jar "/tmp/exist.jar" -options "/tmp/options.txt" || true \ 
@@ -39,7 +41,7 @@ RUN apk --update add bash pwgen curl \
     && printf "#!/bin/sh\necho $LANG" > /usr/bin/locale \
     && chmod +x /usr/bin/locale \
     # remove portal webapp
-    && rm -Rf ${EXIST_HOME}/tools/jetty/webapps/portal
+    && rm -Rf ${EXIST_HOME}/etc/jetty/webapps/portal
 
 # adding expath packages to the autodeploy directory
 ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
@@ -53,15 +55,15 @@ COPY adjust-conf-files.xsl ${EXIST_HOME}/
 COPY log4j2.xml ${EXIST_HOME}/ 
 
 # set permissions for the wegajetty user
-RUN chown -R wegajetty:wegajetty ${EXIST_HOME} \
+RUN rm -Rf ${EXIST_DATA_DIR}/* \
+    && chown -R wegajetty:wegajetty ${EXIST_HOME} \
     && chmod 755 ${EXIST_HOME}/entrypoint.sh
 
 # switching to user wegajetty for further copying 
 # and running exist-db 
 USER wegajetty:wegajetty
 
-VOLUME ["${EXIST_HOME}/webapp/WEB-INF/data","${EXIST_HOME}/webapp/WEB-INF/logs","${EXIST_HOME}/tools/jetty/logs"]
-
+VOLUME ["${EXIST_DATA_DIR}"]
 
 HEALTHCHECK --interval=60s --timeout=5s \
   CMD curl -Lf http://localhost:8080${EXIST_CONTEXT_PATH} || exit 1

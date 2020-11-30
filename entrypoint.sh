@@ -1,39 +1,39 @@
 #!/bin/bash
 
-SAXON="java ${JAVA_OPTIONS} -jar ${EXIST_HOME}/lib/endorsed/Saxon-HE-9.6.0-7.jar env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
+SAXON="java ${JAVA_OPTIONS} -jar ${EXIST_HOME}/lib/Saxon-HE-9.9.1-6.jar env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
 
 # remove DTD reference since the URL is broken
-sed -i 2d ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml
+#sed -i 2d ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml
 
 # adjusting configuration files
-${SAXON} -s:${EXIST_HOME}/conf.xml -o:/tmp/conf.xml 
-${SAXON} -s:${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml -o:/tmp/exist-webapp-context.xml
-${SAXON} -s:${EXIST_HOME}/webapp/WEB-INF/controller-config.xml -o:/tmp/controller-config.xml
-${SAXON} -s:${EXIST_HOME}/webapp/WEB-INF/web.xml -o:/tmp/web.xml
-${SAXON} -s:${EXIST_HOME}/log4j2.xml -o:/tmp/log4j2.xml
+${SAXON} -s:${EXIST_HOME}/etc/conf.xml -o:/tmp/conf.xml 
+${SAXON} -s:${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml -o:/tmp/exist-webapp-context.xml
+${SAXON} -s:${EXIST_HOME}/etc/webapp/WEB-INF/controller-config.xml -o:/tmp/controller-config.xml
+${SAXON} -s:${EXIST_HOME}/etc/webapp/WEB-INF/web.xml -o:/tmp/web.xml
+${SAXON} -s:${EXIST_HOME}/etc/log4j2.xml -o:/tmp/log4j2.xml
 
 # copying modified configuration files from tmp folder to original destination
-mv /tmp/conf.xml ${EXIST_HOME}/conf.xml
-mv /tmp/exist-webapp-context.xml ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml
-mv /tmp/controller-config.xml ${EXIST_HOME}/webapp/WEB-INF/controller-config.xml
-mv /tmp/web.xml ${EXIST_HOME}/webapp/WEB-INF/web.xml
-mv /tmp/log4j2.xml ${EXIST_HOME}/log4j2.xml
+mv /tmp/conf.xml ${EXIST_HOME}/etc/conf.xml
+mv /tmp/exist-webapp-context.xml ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml
+mv /tmp/controller-config.xml ${EXIST_HOME}/etc/webapp/WEB-INF/controller-config.xml
+mv /tmp/web.xml ${EXIST_HOME}/etc/webapp/WEB-INF/web.xml
+mv /tmp/log4j2.xml ${EXIST_HOME}/etc/log4j2.xml
 
 # function for setting the exist password
 function set_passwd {
-${EXIST_HOME}/bin/client.sh -l -s -u admin -P \$adminPasswd << EOF 
+${EXIST_HOME}/bin/client.sh -l -s -u admin -P "" << EOF 
 passwd admin
 $1
 $1
 quit
 EOF
-echo "do not delete" > ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret
+echo "do not delete" > ${EXIST_DATA_DIR}/.docker_secret
 }
 
 # now we are setting the admin password
-# if the magic file ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret exists
+# if the magic file ${EXIST_DATA_DIR}/.docker_secret exists
 # we won't take any action because the password is already set
-if [[ -s ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret ]]
+if [[ -s ${EXIST_DATA_DIR}/.docker_secret ]]
 then 
     echo "********************"
     echo "password already set"
@@ -52,7 +52,7 @@ then
 
 # next, look for the ${EXIST_PASSWORD} environment variable 
 # to set the password 
-elif [[ ${EXIST_PASSWORD} ]] && ! [[ -s ${EXIST_HOME}/webapp/WEB-INF/data/.docker_secret ]]
+elif [[ ${EXIST_PASSWORD} ]] && ! [[ -s ${EXIST_DATA_DIR}/.docker_secret ]]
 then
     # read the password from the environment variable ${EXIST_PASSWORD}
     echo "*************************************************"
