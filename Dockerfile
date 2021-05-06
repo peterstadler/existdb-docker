@@ -14,7 +14,7 @@ ARG VERSION
 ARG MAX_MEMORY
 
 ENV VERSION ${VERSION:-5.2.0}
-ENV EXIST_URL https://dl.bintray.com/existdb/releases/exist-installer-${VERSION}.jar
+ENV EXIST_URL https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar
 ENV EXIST_HOME /opt/exist
 ENV MAX_MEMORY ${MAX_MEMORY:-2048}
 ENV EXIST_ENV ${EXIST_ENV:-development}
