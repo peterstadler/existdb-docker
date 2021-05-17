@@ -11,11 +11,11 @@ particular—so the default settings in eXist's `conf.xml` for whitespace handli
 # How to build
 Navigate into the root directory of this repository and enter:
 ```
-docker build -t existdb --build-arg VERSION=3.6.0 .
+docker build -t existdb --build-arg VERSION=5.2.0 .
 ```
 
 ## available parameters
-* **VERSION**: The eXist version to use. Defaults to 3.3.0
+* **VERSION**: The eXist version to use. Defaults to 5.2.0
 * **MAX_MEMORY**: The max memory setting for eXist. Defaults to 2048 (megabyte). 
    This can be overwritten when starting a container by adding e.g. `-e JAVA_OPTIONS="-Xmx1024m"`    
 
@@ -24,8 +24,8 @@ docker build -t existdb --build-arg VERSION=3.6.0 .
 docker run --rm -it \
     -p 8080:8080 \
     --name existdb \
-    -v /your/path/to/exist-data:/opt/exist/webapp/WEB-INF/data \
-    -v /your/path/to/exist-logs:/opt/exist/webapp/WEB-INF/logs \
+    -v /your/path/to/exist-data:/opt/exist/data \
+    -v /your/path/to/exist-logs:/opt/exist/logs \
     -e EXIST_ENV=development \
     -e EXIST_CONTEXT_PATH=/exist \    
     stadlerpeter/existdb:latest    
@@ -61,7 +61,7 @@ services:
     secrets:
       - source: existdb_passwd
     volumes:
-      - existdb_data:/opt/exist/webapp/WEB-INF/data
+      - existdb_data:/opt/exist/data
 secrets:
   existdb_passwd:
     file: /local/path/to/password-file
