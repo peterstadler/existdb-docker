@@ -1,39 +1,51 @@
+<<<<<<< HEAD
 #!/bin/bash
 VERSION=$1
-XAR_REPO_URL=$2
-XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
-DIR=`mktemp -d`
+DIR=$2
 
-fetch_xar() {
-    local ABBREV=$1
-    local REPO=$2
-    local FILENAME=$(xmllint --xpath "string(//app[abbrev='"$ABBREV"']/@path)" "$DIR"/apps.xml)
-    echo "downloading $FILENAME from $REPO"
-    curl -L -o "$DIR"/"$FILENAME" "$REPO"/"$FILENAME"
-}
+REPO=https://exist-db.org/exist/apps/public-repo/public
 
-# remove existing XARs from autodeploy folder
-rm -f ${EXIST_HOME}/autodeploy/*.xar
+if [ "$DIR" != "" ]
+then
+    mkdir -p "$DIR"
+else
+    echo DIR not provided as second argument
+    exit;
+fi
 
-echo " fetch apps.xml from " "$XAR_REPO_URL"
-curl -L -o "$DIR"/apps.xml "$XAR_REPO_URL"/apps.xml?version="$VERSION"
-
-echo "fetch XARs"
-echo "=========="
-echo
-echo "writing to $DIR"
-
-for PKG in "${XAR_LIST[@]}"
-do
-    echo
-    echo "processing $PKG"
-    fetch_xar $PKG "$XAR_REPO_URL"
-done
-
-echo "done fetching XARs"
-echo
-echo "copy updated XARs to autodeploy folder"
-cp "$DIR"/*.xar ${EXIST_HOME}/autodeploy/
-
-# delete temporary dir
-rm -Rf "$DIR" 
+if [ "$VERSION" != "" ]
+then
+    curl -L -o "$DIR"/apps.xml "$REPO"/apps.xml?version="$VERSION"
+    DB=$(xmllint --xpath "string(//app[abbrev='dashboard']/@path)" "$DIR"/apps.xml)
+    echo "$DB"
+    curl -L -o "$DIR"/"$DB" "$REPO"/"$DB"
+    FUNCTX=$(xmllint --xpath "string(//app[abbrev='functx']/@path)" "$DIR"/apps.xml)
+    echo "$FUNCTX"
+    curl -L -o "$DIR"/"$FUNCTX" "$REPO"/"$FUNCTX"
+    PKG=$(xmllint --xpath "string(//app[abbrev='packageservice']/@path)" "$DIR"/apps.xml)
+    echo "$PKG"
+    curl -L -o "$DIR"/"$PKG" "$REPO"/"$PKG"
+    MONEX=$(xmllint --xpath "string(//app[abbrev='monex']/@path)" "$DIR"/apps.xml)
+    echo "$MONEX"
+    curl -L -o "$DIR"/"$MONEX" "$REPO"/"$MONEX"
+    SHARED=$(xmllint --xpath "string(//app[abbrev='shared']/@path)" "$DIR"/apps.xml)
+    echo "$SHARED"
+    curl -L -o "$DIR"/"$SHARED" "$REPO"/"$SHARED"
+    SEMVER=$(xmllint --xpath "string(//app[abbrev='semver-xq']/@path)" "$DIR"/apps.xml)
+    echo "$SEMVER"
+    curl -L -o "$DIR"/"$SEMVER" "$REPO"/"$SEMVER"
+    EXIDE=$(xmllint --xpath "string(//app[abbrev='eXide']/@path)" "$DIR"/apps.xml)
+    echo "$EXIDE"
+    curl -L -o "$DIR"/"$EXIDE" "$REPO"/"$EXIDE"
+    MD=$(xmllint --xpath "string(//app[abbrev='markdown']/@path)" "$DIR"/apps.xml)
+    echo "$MD"
+    curl -L -o "$DIR"/"$MD" "$REPO"/"$MD"
+    DOC=$(xmllint --xpath "string(//app[abbrev='exist-documentation']/@path)" "$DIR"/apps.xml)
+    echo "$DOC"
+    curl -L -o "$DIR"/"$DOC" "$REPO"/"$DOC"
+    FUNDOC=$(xmllint --xpath "string(//app[abbrev='fundocs']/@path)" "$DIR"/apps.xml)
+    echo "$FUNDOC"
+    curl -L -o "$DIR"/"$FUNDOC" "$REPO"/"$FUNDOC"
+else
+    echo VERSION not set
+fi
