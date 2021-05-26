@@ -12,6 +12,7 @@ RUN addgroup -S wegajetty \
 
 ARG VERSION
 ARG MAX_MEMORY
+ARG XAR_REPO_URL
 
 ENV VERSION ${VERSION:-5.2.0}
 ENV EXIST_URL https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar
@@ -20,6 +21,7 @@ ENV MAX_MEMORY ${MAX_MEMORY:-2048}
 ENV EXIST_ENV ${EXIST_ENV:-development}
 ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
 ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
+ENV XAR_REPO_URL ${XAR_REPO_URL:-https://exist-db.org/exist/apps/public-repo/public}
 
 WORKDIR ${EXIST_HOME}
 
@@ -27,7 +29,7 @@ WORKDIR ${EXIST_HOME}
 ADD ${EXIST_URL} /tmp/exist.jar
 #COPY *.jar /tmp/exist.jar
 
-RUN apk --update add bash pwgen curl \
+RUN apk --update add bash pwgen curl libxml2-utils \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
     && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \
@@ -44,7 +46,9 @@ RUN apk --update add bash pwgen curl \
     && rm -Rf ${EXIST_HOME}/etc/jetty/webapps/portal
 
 # adding expath packages to the autodeploy directory
-ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
+COPY update-xars.sh /tmp/update-xars.sh
+RUN chmod +x /tmp/update-xars.sh
+RUN /tmp/update-xars.sh ${VERSION} ${XAR_REPO_URL}
 #COPY *.xar ${EXIST_HOME}/autodeploy/
 
 # adding the entrypoint script
