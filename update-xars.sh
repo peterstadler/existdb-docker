@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #!/bin/bash
 VERSION=$1
 DIR=$2
