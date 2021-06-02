@@ -2,7 +2,17 @@
 VERSION=$1
 XAR_REPO_URL=$2
 XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
-DIR=`mktemp -d`
+#if $3 is existing directory use as DIR, else create temporary directory
+if [[ -d "$3" ]]
+then
+    DIR="$3"
+    CLEANUP=false
+elif [[ "$3" != "" ]]
+then
+    DIR=`mkdir -p "$3"`
+else
+    DIR=`mktemp -d`
+fi
 
 fetch_xar() {
     local ABBREV=$1
@@ -32,8 +42,13 @@ done
 
 echo "done fetching XARs"
 echo
-echo "copy updated XARs to autodeploy folder"
-cp "$DIR"/*.xar ${EXIST_HOME}/autodeploy/
 
 # delete temporary dir
-rm -Rf "$DIR" 
+if [[ "$CLEANUP" = "false" ]]
+then
+    echo "XARs are located at: $DIR"
+else
+    echo "copy updated XARs to autodeploy folder"
+    cp "$DIR"/*.xar ${EXIST_HOME}/autodeploy/
+    rm -Rf "$DIR"
+fi
