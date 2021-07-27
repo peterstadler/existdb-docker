@@ -4,6 +4,7 @@
 
 FROM openjdk:8-jre-alpine
 MAINTAINER Peter Stadler
+LABEL org.opencontainers.image.source=https://github.com/peterstadler/existdb-docker
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN addgroup -S wegajetty \
