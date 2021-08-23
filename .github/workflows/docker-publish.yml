@@ -67,5 +67,5 @@ jobs:
             VERSION=${{ matrix.EXIST_VERSION }}
             EXIST_URL=${{ matrix.EXIST_URL }}
           push: ${{ github.event_name != 'pull_request' }}
-          tags: {{ env.REGISTRY }}/{{ env.IMAGE_NAME }}:${{ matrix.IMAGE_TAG }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.IMAGE_TAG }}
           labels: ${{ steps.meta.outputs.labels }}
