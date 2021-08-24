@@ -33,6 +33,9 @@ jobs:
           - IMAGE_TAG: 5.2
             EXIST_VERSION: 5.2.0
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.2.0/exist-installer-5.2.0.jar
+          - IMAGE_TAG: 4
+            EXIST_VERSION: 4.7.1
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.7.1/eXist-db-setup-4.7.1.jar
     permissions:
       contents: read
       packages: write
