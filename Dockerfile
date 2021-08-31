@@ -14,6 +14,7 @@ RUN addgroup -S wegajetty \
 ARG VERSION
 ARG MAX_MEMORY
 ARG EXIST_URL
+ARG SAXON_JAR
 
 ENV VERSION ${VERSION:-5.3.0}
 ENV EXIST_URL ${EXIST_URL:-https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar}
@@ -22,6 +23,7 @@ ENV MAX_MEMORY ${MAX_MEMORY:-2048}
 ENV EXIST_ENV ${EXIST_ENV:-development}
 ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
 ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
+ENV SAXON_JAR ${SAXON_JAR:-/opt/exist/lib/Saxon-HE-9.9.1-7.jar}
 
 WORKDIR ${EXIST_HOME}
 
