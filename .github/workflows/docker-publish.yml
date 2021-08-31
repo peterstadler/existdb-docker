@@ -86,6 +86,7 @@ jobs:
           build-args: |
             VERSION=${{ matrix.EXIST_VERSION }}
             EXIST_URL=${{ matrix.EXIST_URL }}
+            SAXON_JAR=${{ matrix.SAXON_JAR }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: | 
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.IMAGE_TAG }}
