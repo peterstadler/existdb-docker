@@ -14,7 +14,7 @@ echo
 # check submitted arguments
 echo "checking submitted arguments…"
 echo
-if [[ "$#" -ne 1 ]]
+if [[ "$#" -eq 0 ]]
 then
     echo "ERROR!"
     echo "You have to submit at least one argument indicating"
