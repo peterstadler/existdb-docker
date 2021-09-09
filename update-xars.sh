@@ -16,12 +16,12 @@ echo "checking submitted arguments…"
 echo
 if [[ "$#" -ne 1 ]]
 then
-  echo "ERROR!"
-  echo "You have to submit at least one argument indicating"
-  echo "the target eXist-db version. For more information see:"
-  echo "https://github.com/peterstadler/existdb-docker"
-  echo
-  exit
+    echo "ERROR!"
+    echo "You have to submit at least one argument indicating"
+    echo "the target eXist-db version. For more information see:"
+    echo "https://github.com/peterstadler/existdb-docker"
+    echo
+    exit
 fi
 # $VERSION is the eXist-db version
 VERSION=$1
