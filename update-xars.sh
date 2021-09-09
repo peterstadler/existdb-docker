@@ -1,4 +1,29 @@
 #!/bin/bash
+# echo welcome
+echo
+echo "#################################"
+echo "# Welcome to the update-xars.sh #"
+echo "#################################"
+echo
+echo "This script will fetch the latest versions of XARs for eXist-db."
+echo "The target version of eXist-db has to be submitted as first argument."
+echo "The URL of the repo from which to fetch the XARs can be submitted as"
+echo "second parameter but will default to the eXist-db public repo at:"
+echo "https://exist-db.org/exist/apps/public-repo/public"
+echo
+# check submitted arguments
+echo "checking submitted arguments…"
+echo
+if [[ "$#" -ne 1 ]]
+then
+  echo "ERROR!"
+  echo "You have to submit at least one argument indicating"
+  echo "the target eXist-db version. For more information see:"
+  echo "https://github.com/peterstadler/existdb-docker"
+  echo
+  exit
+fi
+# $VERSION is the eXist-db version
 VERSION=$1
 XAR_REPO_URL=$2
 XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
