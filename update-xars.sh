@@ -49,7 +49,13 @@ then
     echo "Will raise an error and prompt an error message."
     echo
     echo
-    echo "2. \$ ./update-xars.sh 5.2.0"
+    echo "2. \$ ./update-xars.sh help"
+    echo "-------------------"
+    echo
+    echo "Prompts this help."
+    echo
+    echo
+    echo "3. \$ ./update-xars.sh 5.2.0"
     echo "-------------------------"
     echo
     echo "Will download the latest XAR versions for eXist-db version 5.2.0."
@@ -57,14 +63,21 @@ then
     echo "The location of the temporary directory will be prompted at the end of the script."
     echo
     echo
-    echo "3. \$ ./update-xars.sh 5.2.0 https://your-custom-repo-url/public"
+    echo "3. \$ ./update-xars.sh 5.2.0 \"dashboard eXide\""
     echo "----------------------------------------------------------------"
+    echo
+    echo "The second argument is to be passed in as string array. It can be"
+    echo "used to specify the abbreviated package-names of the XARs to fetch."
+    echo
+    echo
+    echo "4. \$ ./update-xars.sh 5.2.0 \"dashboard eXide\" https://your-custom-repo-url/public"
+    echo "------------------------------------------------------------------------------------"
     echo
     echo "Same as 2. but the XARs will be fetched from https://your-custom-repo-url/public."
     echo
     echo
-    echo "4. \$ ./update-xars.sh 5.2.0 https://your-custom-repo-url/public ./your/custom/target/directory"
-    echo "-----------------------------------------------------------------------------------------------"
+    echo "5. \$ ./update-xars.sh 5.2.0 \"dashboard eXide\" https://your-custom-repo-url/public ./your/custom/target/directory"
+    echo "-------------------------------------------------------------------------------------------------------------------"
     echo
     echo "Same as 3. but the downloaded XARs will be copied to ./your/custom/target/directory"
     echo "after downloading has finished."
@@ -75,43 +88,54 @@ then
     echo "other files. Theses could interfere when using the directory as autodeploy"
     echo "directory with eXist-db. If you want to prune the directory's contents before"
     echo "copying the newly downloaded XARs, please submit 'prune' as fourth argument."
-    echo ""
+    echo 
+    echo 
+    echo "5. \$ ./update-xars.sh 5.2.0 \"dashboard eXide\" https://your-custom-repo-url/public ./your/custom/target/directory prune"
+    echo "-------------------------------------------------------------------------------------------------------------------------"
+    echo
+    echo "If you submit \"prune\" as fifth argument ./your/custom/target/directory will"
+    echo "be pruned of any existing XARs, before the newly fetched XARs ar copied to location."
     exit
 fi
 
 # $VERSION is the eXist-db version
 VERSION=$1
+
+# Set list of package-names to fetch
+if [[ "$#" -ge 2 ]]
+then
+    XAR_LIST=($2)
+else
+    XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
+fi
+
 # $XAR_REPO_URL is the URL to the XAR repo where the XAR packages will be fetched
 echo "setting XAR_REPO_URL to:"
-if [[ "$#" -eq 2 ]]
+if [[ "$#" -ge 3 ]]
 then
-    XAR_REPO_URL=$2
+    XAR_REPO_URL=$3
 else
     XAR_REPO_URL=https://exist-db.org/exist/apps/public-repo/public
 fi
 echo "$XAR_REPO_URL"
 echo
 
-# list of package-names to fetch
-# might get configurable in some future version
-XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
-
 # create temporary download directory
-echo "Creating temporary download folder at:"
+echo "Creating temporary download directory at:"
 DIR=`mktemp -d`
 echo "$DIR"
 
-#if $3 is existing directory use as PUBDIR, else create temporary directory
-if [[ "$#" -ge 3 ]]
+#if $4 is existing directory use as PUBDIR, else create temporary directory
+if [[ "$#" -ge 4 ]]
 then
-    if [[ -d "$3" ]]
+    if [[ -d "$4" ]]
     then
         echo "Setting target folder to existing folder:"
-        PUBDIR=$3
-    elif [[ "$3" != "" ]]
+        PUBDIR=$4
+    elif [[ "$4" != "" ]]
     then
         echo "Creating target folder at:"
-        PUBDIR=`mkdir -p ${3}`
+        PUBDIR=`mkdir -p ${4}`
     fi
     echo "$PUBDIR"
 fi
@@ -142,7 +166,7 @@ do
     echo
     echo "------------------------"
     echo "processing $PKG"
-    fetch_xar $PKG "$XAR_REPO_URL"
+    fetch_xar "$PKG" "$XAR_REPO_URL"
     echo "------------------------"
 done
 
@@ -154,7 +178,7 @@ echo "XARs have been downloaded to: $DIR"
 # Copy downloaded XARs from \$DIR to \$PUBDIR
 if [[ -n "$PUBDIR" ]]
 then
-    if [[ "$4" == "prune" ]]
+    if [[ "$5" == "prune" ]]
     then
         echo
         echo "Deleting existing XARs in:"
