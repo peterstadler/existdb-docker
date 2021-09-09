@@ -25,7 +25,19 @@ then
 fi
 # $VERSION is the eXist-db version
 VERSION=$1
-XAR_REPO_URL=$2
+# $XAR_REPO_URL is the URL to the XAR repo where the XAR packages will be fetched
+if [[ "$#" -eq 2 ]]
+then
+  echo "setting XAR_REPO_URL to:"
+  echo "$2"
+  echo
+  XAR_REPO_URL=$2
+else
+  echo "setting $XAR_REPO_URL to:"
+  echo "https://exist-db.org/exist/apps/public-repo/public"
+  echo
+  XAR_REPO_URL=https://exist-db.org/exist/apps/public-repo/public
+fi
 XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
 #if $3 is existing directory use as DIR, else create temporary directory
 if [[ -d "$3" ]]
