@@ -39,22 +39,26 @@ echo
 # list of package-names to fetch
 # might get configurable in some future version
 XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
-#if $3 is existing directory use as DIR, else create temporary directory
-if [[ -d "$3" ]]
-then
-    echo "Setting download folder to existing folder:"
-    DIR=$3
-    CLEANUP=false
-elif [[ "$3" != "" ]]
-then
-    echo "Creating download folder at:"
-    DIR=`mkdir -p ${3}`
-else
-    echo "Creating temporary download folder at:"
-    DIR=`mktemp -d`
-fi
+
+# create temporary download directory
+echo "Creating temporary download folder at:"
+DIR=`mktemp -d`
 echo "$DIR"
-echo
+
+#if $3 is existing directory use as PUBDIR, else create temporary directory
+if [[ "$#" -ge 3 ]]
+then
+    if [[ -d "$3" ]]
+    then
+        echo "Setting target folder to existing folder:"
+        PUBDIR=$3
+    elif [[ "$3" != "" ]]
+    then
+        echo "Creating target folder at:"
+        PUBDIR=`mkdir -p ${3}`
+    fi
+    echo "$PUBDIR"
+fi
 
 fetch_xar() {
     local ABBREV=$1
@@ -91,12 +95,21 @@ echo "done fetching XARs"
 echo
 echo "XARs have been downloaded to: $DIR"
 
-# delete temporary dir
-if [[ "$CLEANUP" = "false" ]]
+# Copy downloaded XARs from \$DIR to \$PUBDIR
+if [[ -n "$PUBDIR" ]]
 then
-    echo "XARs are located at: $DIR"
-else
-    echo "copy updated XARs to autodeploy folder"
-    cp "$DIR"/*.xar ${EXIST_HOME}/autodeploy/
+    if [[ "$4" == "prune" ]]
+    then
+        echo
+        echo "Deleting existing XARs in:"
+        echo "$PUBDIR"
+        rm -f ${PUBDIR}/*.xar
+    fi
+    echo
+    echo "Copying updated XARs to target directory:"
+    echo "$PUBDIR"
+    cp "$DIR"/*.xar $PUBDIR
+    echo
+    echo "Removing temporary download directory…"
     rm -Rf "$DIR"
 fi
