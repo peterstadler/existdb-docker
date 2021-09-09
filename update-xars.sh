@@ -40,14 +40,19 @@ XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex pack
 #if $3 is existing directory use as DIR, else create temporary directory
 if [[ -d "$3" ]]
 then
-    DIR="$3"
+    echo "Setting download folder to existing folder:"
+    DIR=$3
     CLEANUP=false
 elif [[ "$3" != "" ]]
 then
+    echo "Creating download folder at:"
     DIR=`mkdir -p "$3"`
 else
+    echo "Creating temporary download folder at:"
     DIR=`mktemp -d`
 fi
+echo "$DIR"
+echo
 
 fetch_xar() {
     local ABBREV=$1
