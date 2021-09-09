@@ -63,25 +63,29 @@ fetch_xar() {
 }
 
 # remove existing XARs from autodeploy folder
-rm -f ${EXIST_HOME}/autodeploy/*.xar
 
-echo " fetch apps.xml from " "$XAR_REPO_URL"
+echo "Fetching apps.xml from $XAR_REPO_URL"
 curl -L -o "$DIR"/apps.xml "$XAR_REPO_URL"/apps.xml?version="$VERSION"
 
-echo "fetch XARs"
-echo "=========="
 echo
-echo "writing to $DIR"
+echo "fetching XARs"
+echo "============="
+echo
+echo "XARs will be written to $DIR"
 
 for PKG in "${XAR_LIST[@]}"
 do
     echo
+    echo "------------------------"
     echo "processing $PKG"
     fetch_xar $PKG "$XAR_REPO_URL"
+    echo "------------------------"
 done
 
+echo
 echo "done fetching XARs"
 echo
+echo "XARs have been downloaded to: $DIR"
 
 # delete temporary dir
 if [[ "$CLEANUP" = "false" ]]
