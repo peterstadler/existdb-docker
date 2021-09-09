@@ -46,7 +46,7 @@ then
 elif [[ "$3" != "" ]]
 then
     echo "Creating download folder at:"
-    DIR=`mkdir -p "$3"`
+    DIR=`mkdir -p ${3}`
 else
     echo "Creating temporary download folder at:"
     DIR=`mktemp -d`
