@@ -36,6 +36,8 @@ fi
 echo "$XAR_REPO_URL"
 echo
 
+# list of package-names to fetch
+# might get configurable in some future version
 XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
 #if $3 is existing directory use as DIR, else create temporary directory
 if [[ -d "$3" ]]
@@ -63,6 +65,8 @@ fetch_xar() {
 }
 
 # remove existing XARs from autodeploy folder
+# echo "Removing existing XARs from autodeploy folder."
+# rm -f ${EXIST_HOME}/autodeploy/*.xar
 
 echo "Fetching apps.xml from $XAR_REPO_URL"
 curl -L -o "$DIR"/apps.xml "$XAR_REPO_URL"/apps.xml?version="$VERSION"
