@@ -1,26 +1,56 @@
 #!/bin/bash
+
+# parse submitted options
+while getopts ":v:r:d:px:h" opt; do
+  case $opt in
+    v) VERSION="$OPTARG"
+    ;;
+    r) REPO_URL="$OPTARG"
+    ;;
+    d) PUBDIR="$OPTARG"
+    ;;
+    p) PRUNE=true
+    ;;
+    x) XAR_LIST=($OPTARG)
+    ;;
+    h) HELP=true
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+    ;;
+  esac
+done
+
+#define typefaces
+bold=$(tput bold)
+normal=$(tput sgr0)
+
 # echo welcome
 echo
 echo "#################################"
 echo "# Welcome to the update-xars.sh #"
 echo "#################################"
 echo
-# check submitted arguments
-echo "checking submitted arguments…"
+echo "This script has been called with the following options:"
 echo
-if [[ "$#" -eq 0 ]]
+echo "VERSION of eXist-db: $VERSION"
+echo "REPO_URL for fetching XARs: $REPO_URL"
+echo "XAR_LIST being XAR abbreviated names to fetch: ${XAR_LIST[@]}"
+echo "PUBDIR directory in which to place the fetched XARs: $PUBDIR"
+echo "HELP for showing documentation: $HELP"
+
+# check for version
+if [[ -z $VERSION ]]
 then
     echo "ERROR!"
-    echo "You have to submit at least one argument indicating"
+    echo "You have to submit at least the version \(-v\) indicating"
     echo "the target eXist-db version. For more information see:"
     echo "https://github.com/peterstadler/existdb-docker"
-    echo "or execute with first argument being:"
-    echo "help"
-    echo
+    echo "or execute this script with the help option \(-h\)."
+    echo ""
     exit
 fi
 
-if [[ "$1" == "help" ]]
+if [[ $HELP = true ]]
 then
     echo "You called help for using this script…"
     echo
@@ -30,7 +60,12 @@ then
     echo
     echo 
     echo "This script will fetch the latest versions of XARs for eXist-db."
-    echo "The target version of eXist-db has to be submitted as first argument."
+    echo "The target version of eXist-db has to be submitted with the -v option."
+    echo
+    echo "The following options are available:"
+    echo
+    echo "TODO"
+    echo
     echo "The URL of the repo from which to fetch the XARs can be submitted as"
     echo "second argument but will default to the eXist-db public repo at:"
     echo "https://exist-db.org/exist/apps/public-repo/public"
@@ -98,47 +133,24 @@ then
     exit
 fi
 
-# $VERSION is the eXist-db version
-VERSION=$1
-
 # Set list of package-names to fetch
-if [[ "$#" -ge 2 ]]
-then
-    XAR_LIST=($2)
-else
+if [[ ${#XAR_LIST[@]} == 0 ]]
+then 
     XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
+    echo "Defaulted XAR_LIST to: ${XAR_LIST[*]}"
 fi
 
-# $XAR_REPO_URL is the URL to the XAR repo where the XAR packages will be fetched
-echo "setting XAR_REPO_URL to:"
-if [[ "$#" -ge 3 ]]
+# $REPO_URL is the URL to the XAR repo where the XAR packages will be fetched
+if [[ -z "$REPO_URL" ]]
 then
-    XAR_REPO_URL=$3
-else
-    XAR_REPO_URL=https://exist-db.org/exist/apps/public-repo/public
+    REPO_URL=https://exist-db.org/exist/apps/public-repo/public
+    echo "Defaulted REPO_URL to: $REPO_URL"
 fi
-echo "$XAR_REPO_URL"
-echo
 
 # create temporary download directory
 echo "Creating temporary download directory at:"
 DIR=`mktemp -d`
 echo "$DIR"
-
-#if $4 is existing directory use as PUBDIR, else create temporary directory
-if [[ "$#" -ge 4 ]]
-then
-    if [[ -d "$4" ]]
-    then
-        echo "Setting target folder to existing folder:"
-        PUBDIR=$4
-    elif [[ "$4" != "" ]]
-    then
-        echo "Creating target folder at:"
-        PUBDIR=`mkdir -p ${4}`
-    fi
-    echo "$PUBDIR"
-fi
 
 fetch_xar() {
     local ABBREV=$1
@@ -148,37 +160,41 @@ fetch_xar() {
     curl -L -o "$DIR"/"$FILENAME" "$REPO"/"$FILENAME"
 }
 
-# remove existing XARs from autodeploy folder
-# echo "Removing existing XARs from autodeploy folder."
-# rm -f ${EXIST_HOME}/autodeploy/*.xar
-
-echo "Fetching apps.xml from $XAR_REPO_URL"
-curl -L -o "$DIR"/apps.xml "$XAR_REPO_URL"/apps.xml?version="$VERSION"
+echo
+echo "Fetching apps.xml"
+echo "================="
+echo "from $REPO_URL"
+echo
+curl -L -o "$DIR"/apps.xml "$REPO_URL"/apps.xml?version="$VERSION"
 
 echo
 echo "fetching XARs"
 echo "============="
-echo
-echo "XARs will be written to $DIR"
+echo "XARs will be downloaded to:"
+echo "$DIR"
 
 for PKG in "${XAR_LIST[@]}"
 do
     echo
     echo "------------------------"
     echo "processing $PKG"
-    fetch_xar "$PKG" "$XAR_REPO_URL"
+    fetch_xar "$PKG" "$REPO_URL"
     echo "------------------------"
 done
 
 echo
 echo "done fetching XARs"
 echo
-echo "XARs have been downloaded to: $DIR"
+echo "XARs have been downloaded to:"
+echo "$DIR"
 
 # Copy downloaded XARs from \$DIR to \$PUBDIR
 if [[ -n "$PUBDIR" ]]
 then
-    if [[ "$5" == "prune" ]]
+    mkdir -p ${PUBDIR}
+    echo "Assured presence of target directory at:"
+    echo "$PUBDIR"
+    if [[ $PRUNE = true ]]
     then
         echo
         echo "Deleting existing XARs in:"
