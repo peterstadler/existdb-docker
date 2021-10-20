@@ -29,7 +29,8 @@ ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
 ENV SAXON_JAR ${SAXON_JAR:-/opt/exist/lib/Saxon-HE-9.9.1-7.jar}
 ENV XAR_REPO_URL ${XAR_REPO_URL:-https://exist-db.org/exist/apps/public-repo/public}
 ENV UPDATE_XARS ${UPDATE_XARS:-false}
-ENV XAR_REPO_URL ${XAR_REPO_URL:-https://exist-db.org/exist/apps/public-repo/public}
+ENV XAR_REPO_URL ${XAR_REPO_URL:+-r ${XAR_REPO_URL}}
+ENV XAR_NAMES ${XAR_NAMES:+-x ${XAR_NAMES}}
 
 WORKDIR ${EXIST_HOME}
 
