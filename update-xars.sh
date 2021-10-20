@@ -48,8 +48,8 @@ echo_help() {
     echo "          If not specified, the XARs will be written to a system temporary directory, the location of which"
     echo "          will be echoed at the end of the script."
     echo
-    echo "    ${b}-p${n}    [prune][as boolean]"
-    echo "          if set to ${b}true${n} all XAR files in the directory submitted with ${b}-d${n} will be deleted,"
+    echo "    ${b}-p${n}    [prune]"
+    echo "          if set all XAR files in the directory submitted with ${b}-d${n} will be deleted,"
     echo "          before the fetched XARs are being moved there."
     echo
     echo "    ${b}-x${n}    [XAR-list][as whitespace-separated string-array]"
