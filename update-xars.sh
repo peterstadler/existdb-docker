@@ -24,95 +24,80 @@ done
 b=$(tput bold)
 n=$(tput sgr0)
 
-# echo welcome
-echo
-echo "#################################"
-echo "# Welcome to the update-xars.sh #"
-echo "#################################"
-echo
-echo "This script has been called with the following options:"
-echo
-echo "VERSION of eXist-db: $VERSION"
-echo "REPO_URL for fetching XARs: $REPO_URL"
-echo "XAR_LIST being XAR abbreviated names to fetch: ${XAR_LIST[@]}"
-echo "PUBDIR directory in which to place the fetched XARs: $PUBDIR"
-echo "HELP for showing documentation: $HELP"
-
-# check for version
-if [[ -z $VERSION ]]
-then
-    echo "ERROR!"
-    echo "You have to submit at least the version \(-v\) indicating"
-    echo "the target eXist-db version. For more information see:"
-    echo "https://github.com/peterstadler/existdb-docker"
-    echo "or execute this script with the help option \(-h\)."
-    echo ""
-    exit
-fi
-
-if [[ $HELP = true ]]
-then
-    echo "You called help for using this script…"
+echo_help() {
     echo
     echo "########"
-    echo "# HELP #"
+    echo "# ${b}HELP${n} #"
     echo "########"
     echo
-    echo 
     echo "This script will fetch the latest versions of XARs for eXist-db."
-    echo "The target version of eXist-db has to be submitted with the -v option."
+    echo "The target version of eXist-db has to be submitted with the ${b}-v${n} option."
     echo
     echo "The following options are available:"
     echo
-    echo "TODO"
+    echo "    ${b}-v${n}    [version][as semantic version]"
+    echo "          indicates the eXist-db version you want to fetch the XARs for, e.g.:"
+    echo "              -v 5.2.0"
     echo
-    echo "The URL of the repo from which to fetch the XARs can be submitted as"
-    echo "second argument but will default to the eXist-db public repo at:"
-    echo "https://exist-db.org/exist/apps/public-repo/public"
+    echo "    ${b}-r${n}    [repository][as URL]"
+    echo "          indicated the repository URL to fetch the XARs from, will default to the eXist-db public repo at:"
+    echo "          https://exist-db.org/exist/apps/public-repo/public"
     echo
-    echo "A folder location can be submitted as third argument. The downloaded"
-    echo "XARs will be copied to this location after completing all downloads."
-    echo "Please be aware that you will have to submit the repo URL as second"
-    echo "argument if you want to specify a target folder!"
+    echo "    ${b}-d${n}    [directory][as relative or absolute system file path]"
+    echo "          indicates the the directory the fetched XARs should be copiped to after finishing all downloads."
+    echo "          If not specified, the XARs will be written to a system temporary directory, the location of which"
+    echo "          will be echoed at the end of the script."
+    echo
+    echo "    ${b}-p${n}    [prune][as boolean]"
+    echo "          if set to ${b}true${n} all XAR files in the directory submitted with ${b}-d${n} will be deleted,"
+    echo "          before the fetched XARs are being moved there."
+    echo
+    echo "    ${b}-x${n}    [XAR-list][as whitespace-separated string-array]"
+    echo "          lists the shortnames of the XARs to fetch, will default to:"
+    echo "          \"dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared\""
+    echo
+    echo "    ${b}-h${n}    [help]"
+    echo "          displays this help."
+    echo
     echo
     echo "EXAMPLE USAGE"
     echo "============="
     echo
     echo "1. \$ ./update-xars.sh"
-    echo "-------------------"
+    echo "---------------------"
     echo
     echo "Will raise an error and prompt an error message."
     echo
     echo
-    echo "2. \$ ./update-xars.sh help"
-    echo "-------------------"
+    echo "2. \$ ./update-xars.sh -h"
+    echo "------------------------"
     echo
     echo "Prompts this help."
     echo
     echo
-    echo "3. \$ ./update-xars.sh 5.2.0"
-    echo "-------------------------"
+    echo "3. \$ ./update-xars.sh -v 5.2.0"
+    echo "------------------------------"
     echo
     echo "Will download the latest XAR versions for eXist-db version 5.2.0."
     echo "The XARs will be downloaded to a system temporary directory."
     echo "The location of the temporary directory will be prompted at the end of the script."
     echo
     echo
-    echo "3. \$ ./update-xars.sh 5.2.0 \"dashboard eXide\""
-    echo "----------------------------------------------------------------"
+    echo "3. \$ ./update-xars.sh -v 5.2.0 -x \"dashboard eXide\""
+    echo "---------------------------------------------------"
     echo
     echo "The second argument is to be passed in as string array. It can be"
     echo "used to specify the abbreviated package-names of the XARs to fetch."
     echo
     echo
-    echo "4. \$ ./update-xars.sh 5.2.0 \"dashboard eXide\" https://your-custom-repo-url/public"
-    echo "------------------------------------------------------------------------------------"
+    echo "4. \$ ./update-xars.sh -v 5.2.0 -x \"dashboard eXide\" -r https://your-custom-repo-url/public"
+    echo "------------------------------------------------------------------------------------------"
     echo
     echo "Same as 2. but the XARs will be fetched from https://your-custom-repo-url/public."
     echo
     echo
-    echo "5. \$ ./update-xars.sh 5.2.0 \"dashboard eXide\" https://your-custom-repo-url/public ./your/custom/target/directory"
-    echo "-------------------------------------------------------------------------------------------------------------------"
+    echo "5. \$ ./update-xars.sh -v 5.2.0 -x \"dashboard eXide\" -r https://your-custom-repo-url/public -d ./your/custom/target/directory"
+    echo "----------------------------------------------------------------------------------------------------------------------------"
     echo
     echo "Same as 3. but the downloaded XARs will be copied to ./your/custom/target/directory"
     echo "after downloading has finished."
@@ -125,11 +110,48 @@ then
     echo "copying the newly downloaded XARs, please submit 'prune' as fourth argument."
     echo 
     echo 
-    echo "5. \$ ./update-xars.sh 5.2.0 \"dashboard eXide\" https://your-custom-repo-url/public ./your/custom/target/directory prune"
-    echo "-------------------------------------------------------------------------------------------------------------------------"
+    echo "5. \$ ./update-xars.sh -v 5.2.0 -x \"dashboard eXide\" -r https://your-custom-repo-url/public -d ./your/custom/target/directory -p"
+    echo "-------------------------------------------------------------------------------------------------------------------------------"
     echo
     echo "If you submit \"prune\" as fifth argument ./your/custom/target/directory will"
     echo "be pruned of any existing XARs, before the newly fetched XARs ar copied to location."
+}
+
+# echo welcome
+echo
+echo "#################################"
+echo "# ${b}Welcome to the update-xars.sh${n} #"
+echo "#################################"
+echo
+echo "This script will fetch the latest versions of XARs for eXist-db."
+echo "The target version of eXist-db has to be submitted with the -v option."
+echo
+echo "This script has been called with the following options:"
+echo
+echo "VERSION of eXist-db: $VERSION"
+echo "REPO_URL for fetching XARs: $REPO_URL"
+echo "XAR_LIST being XAR abbreviated names to fetch: ${XAR_LIST[@]}"
+echo "PUBDIR directory in which to place the fetched XARs: $PUBDIR"
+echo "HELP for showing documentation: $HELP"
+echo
+
+if [[ $HELP = true ]]
+then
+    echo_help
+    exit
+fi
+
+# check for version
+if [[ -z $VERSION ]]
+then
+    echo "≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠"
+    echo "                                       ${b}ERROR!${n}                              "
+    echo "You have to submit at least the ${b}-v${n} [version] indicating the target eXist-db version."
+    echo "For more information see:"
+    echo "  https://github.com/peterstadler/existdb-docker"
+    echo "  or execute this script with the ${b}-h${n} [help] option."
+    echo "≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠≠"
+    echo
     exit
 fi
 
