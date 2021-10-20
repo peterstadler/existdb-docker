@@ -49,7 +49,7 @@ RUN apk --update add bash pwgen curl libxml2-utils \
 # adding expath packages to the autodeploy directory
 COPY update-xars.sh /tmp/update-xars.sh
 RUN chmod +x /tmp/update-xars.sh
-RUN /tmp/update-xars.sh ${VERSION} ${XAR_REPO_URL}
+RUN /tmp/update-xars.sh -v ${VERSION} -d ${EXIST_HOME}/autodeploy/ ${XAR_REPO_URL} ${XAR_NAMES} -p
 #COPY *.xar ${EXIST_HOME}/autodeploy/
 
 # adding the entrypoint script
