@@ -21,8 +21,8 @@ while getopts ":v:r:d:px:h" opt; do
 done
 
 #define typefaces
-bold=$(tput bold)
-normal=$(tput sgr0)
+b=$(tput bold)
+n=$(tput sgr0)
 
 # echo welcome
 echo
