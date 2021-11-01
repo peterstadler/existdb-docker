@@ -18,7 +18,8 @@ docker build -t existdb --build-arg VERSION=5.2.0 .
 * **VERSION**: The eXist version to use. Defaults to 5.2.0
 * **MAX_MEMORY**: The max memory setting for eXist. Defaults to 2048 (megabyte). 
    This can be overwritten when starting a container by adding e.g. `-e JAVA_OPTIONS="-Xmx1024m"`    
-* **XAR_REPO_URL**: The repo url to fetch the latest available XARs for the designated eXist-db $VERSION (dashboard, eXide, exist-documentation, exist-function-documentation, functx, markdown, monex, packageservice, semver-xq, and shared-resource). Defaults to https://exist-db.org/exist/apps/public-repo/public.
+* **XAR_REPO_URL**: The repo url to fetch the latest available XARs for the designated eXist-db `$VERSION`. Defaults to https://exist-db.org/exist/apps/public-repo/public.
+* **XAR_NAMES**: A whitespace separated string array ginving the short names of the XARs to retrieve from `$XAR_REPO_URL`, e.g. `"dashboard eXide"` if not set a default value will be set in `update-xars.sh` 
 
 # How to run
 ```

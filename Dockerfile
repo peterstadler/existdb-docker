@@ -13,6 +13,7 @@ RUN addgroup -S wegajetty \
 ARG VERSION
 ARG MAX_MEMORY
 ARG XAR_REPO_URL
+ARG XAR_NAMES
 
 ENV VERSION ${VERSION:-5.2.0}
 ENV EXIST_URL https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar
@@ -21,8 +22,8 @@ ENV MAX_MEMORY ${MAX_MEMORY:-2048}
 ENV EXIST_ENV ${EXIST_ENV:-development}
 ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
 ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
-ENV XAR_REPO_URL ${XAR_REPO_URL:+-r ${XAR_REPO_URL}}
-ENV XAR_NAMES ${XAR_NAMES:+-x ${XAR_NAMES}}
+ENV XAR_REPO_URL ${XAR_REPO_URL}
+ENV XAR_NAMES ${XAR_NAMES}
 
 WORKDIR ${EXIST_HOME}
 
@@ -49,7 +50,7 @@ RUN apk --update add bash pwgen curl libxml2-utils \
 # adding expath packages to the autodeploy directory
 COPY update-xars.sh /tmp/update-xars.sh
 RUN chmod +x /tmp/update-xars.sh
-RUN /tmp/update-xars.sh -v ${VERSION} -d ${EXIST_HOME}/autodeploy/ ${XAR_REPO_URL} ${XAR_NAMES} -p
+RUN /tmp/update-xars.sh -v ${VERSION} -d ${EXIST_HOME}/autodeploy/ -r ${XAR_REPO_URL} -x "${XAR_NAMES}" -p
 #COPY *.xar ${EXIST_HOME}/autodeploy/
 
 # adding the entrypoint script
