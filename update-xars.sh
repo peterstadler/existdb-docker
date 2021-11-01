@@ -24,6 +24,7 @@ done
 b=$(tput bold)
 n=$(tput sgr0)
 
+# define function for echoing help for update-xars.sh
 echo_help() {
     echo
     echo "########"
@@ -135,6 +136,7 @@ echo "PUBDIR directory in which to place the fetched XARs: $PUBDIR"
 echo "HELP for showing documentation: $HELP"
 echo
 
+# if help is set echo help and exit script
 if [[ $HELP = true ]]
 then
     echo_help
@@ -174,6 +176,7 @@ echo "Creating temporary download directory at:"
 DIR=`mktemp -d`
 echo "$DIR"
 
+#define function for fetching a given XAR from REPO
 fetch_xar() {
     local ABBREV=$1
     local REPO=$2
@@ -188,6 +191,7 @@ fetch_xar() {
     fi
 }
 
+# fetch apps.xml from repo for \$VERSION
 echo
 echo "Fetching apps.xml"
 echo "================="
@@ -195,12 +199,14 @@ echo "from $REPO_URL"
 echo
 curl -L -o "$DIR"/apps.xml "$REPO_URL"/apps.xml?version="$VERSION"
 
+# fetch the XARs
 echo
 echo "fetching XARs"
 echo "============="
 echo "XARs will be downloaded to:"
 echo "$DIR"
 
+# iteerate over \$XAR_LIST
 for PKG in "${XAR_LIST[@]}"
 do
     echo
@@ -216,12 +222,13 @@ echo
 echo "XARs have been downloaded to:"
 echo "$DIR"
 
-# Copy downloaded XARs from \$DIR to \$PUBDIR
+# Copy downloaded XARs from \$DIR to \$PUBDIR if \$PUBDIR is set
 if [[ -n "$PUBDIR" ]]
 then
     mkdir -p ${PUBDIR}
     echo "Assured presence of target directory at:"
     echo "$PUBDIR"
+    # if prune is set then delete all xars from target directory before copying
     if [[ $PRUNE = true ]]
     then
         echo
