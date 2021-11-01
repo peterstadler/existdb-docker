@@ -180,6 +180,12 @@ fetch_xar() {
     local FILENAME=$(xmllint --xpath "string(//app[abbrev='"$ABBREV"']/@path)" "$DIR"/apps.xml)
     echo "downloading $FILENAME from $REPO"
     curl -L -o "$DIR"/"$FILENAME" "$REPO"/"$FILENAME"
+    if test -f "$DIR"/"$FILENAME"; then
+        echo "download successful"
+    else
+        echo "error downloading XAR"
+        exit
+    fi
 }
 
 echo
