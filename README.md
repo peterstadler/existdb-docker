@@ -29,25 +29,23 @@ docker run --rm -it \
     -v /your/path/to/exist-data:/opt/exist/data \
     -v /your/path/to/exist-logs:/opt/exist/logs \
     -e EXIST_ENV=development \
-    -e EXIST_CONTEXT_PATH=/exist \    
-    stadlerpeter/existdb:latest    
+    -e EXIST_CONTEXT_PATH=/exist \
+    stadlerpeter/existdb:latest
 ```
 
 ## available parameters
 * **EXIST_ENV**: This will toggle the modification of configuration files. 
     A value of "production" will remove most servlets and will deny direct 
     access to the REST interface. Default is "development" which will not 
-    alter  
+    alter
 * **EXIST_CONTEXT_PATH**: The eXist context path. Defaults to `/exist`, 
     which means you'll find eXist at `http://localhost:8080/exist/` but you 
     may change this to simply `/` and your default app will repond at `http://localhost:8080/`
 *  **EXIST_DEFAULT_APP_PATH**: the database path to your default app, e.g. `xmldb:exist:///db/apps/WeGA-WebApp`.
-    This default app will respond directly at the `$EXIST_CONTEXT_PATH` (while all other apps are still 
-    available at `/apps/`).    
+    This default app will respond directly at the `$EXIST_CONTEXT_PATH` (while all other apps are still available at `/apps/`).
 
 ## setting the admin password
-The admin password can be supplied via the `$EXIST_PASSWORD` environment variable or the equivalent Docker secret `$EXIST_PASSWORD_FILE`. 
-If none of these variables are set (or both contain empty values) a random password will be generated and echoed to the logs.  
+The admin password can be supplied via the `$EXIST_PASSWORD` environment variable or the equivalent Docker secret `$EXIST_PASSWORD_FILE`. If none of these variables are set (or both contain empty values) a random password will be generated and echoed to the logs.
 
 ```
 # docker-compose.yml
