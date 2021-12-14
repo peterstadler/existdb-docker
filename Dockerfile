@@ -1,16 +1,10 @@
 # Dockerfile for running the WeGA-WebApp (https://github.com/Edirom/WeGA-WebApp) 
 #
-# adjusted from https://github.com/jurrian/existdb-alpine
+# initially based on https://github.com/jurrian/existdb-alpine
 
 FROM openjdk:8-jre-slim
 MAINTAINER Peter Stadler
 LABEL org.opencontainers.image.source=https://github.com/peterstadler/existdb-docker
-
-# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-RUN useradd wegajetty
-#RUN addgroup -S wegajetty \
-#    && adduser -D -S -H -G wegajetty wegajetty \
-#    && rm -rf /etc/group- /etc/passwd- /etc/shadow-
 
 ARG VERSION
 ARG MAX_MEMORY
@@ -26,31 +20,14 @@ ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
 ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
 ENV SAXON_JAR ${SAXON_JAR:-/opt/exist/lib/Saxon-HE-9.9.1-7.jar}
 
+
+# add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
+RUN useradd wegajetty
+
 WORKDIR ${EXIST_HOME}
-
-# download eXist
-ADD ${EXIST_URL} /tmp/exist.jar
-#COPY *.jar /tmp/exist.jar
-
-RUN apt-get update \
-    && apt-get install -y curl pwgen \
-    && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
-    && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
-    && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \
-    # install eXist-db
-    # ending with true because java somehow returns with a non-zero after succesfull installing
-    && java -jar "/tmp/exist.jar" -options "/tmp/options.txt" || true \ 
-    && rm -f "/tmp/exist.jar" "/tmp/options.txt" \
-    # prefix java command with exec to force java being process 1 and receiving docker signals
-    && sed -i 's/^${JAVA_RUN/exec ${JAVA_RUN/'  ${EXIST_HOME}/bin/startup.sh \
-    # clean up apt cache 
-    && rm -rf /var/lib/apt/lists/* \
-    # remove portal webapp
-    && rm -Rf ${EXIST_HOME}/etc/jetty/webapps/portal 
 
 # adding expath packages to the autodeploy directory
 ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
-#COPY *.xar ${EXIST_HOME}/autodeploy/
 
 # adding the entrypoint script
 COPY entrypoint.sh ${EXIST_HOME}/
@@ -59,10 +36,27 @@ COPY entrypoint.sh ${EXIST_HOME}/
 COPY adjust-conf-files.xsl ${EXIST_HOME}/
 COPY log4j2.xml ${EXIST_HOME}/ 
 
-# set permissions for the wegajetty user
-RUN rm -Rf ${EXIST_DATA_DIR}/* \
+# main installation put into one RUN to squeeze image size
+RUN apt-get update \
+    && apt-get install -y curl pwgen \
+    && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
+    && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
+    && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \
+    # install eXist-db
+    # ending with true because java somehow returns with a non-zero after succesfull installing
+    && curl -sL ${EXIST_URL} -o /tmp/exist.jar \
+    && java -jar "/tmp/exist.jar" -options "/tmp/options.txt" || true \ 
+    && rm -fr "/tmp/exist.jar" "/tmp/options.txt" ${EXIST_DATA_DIR}/* \
+    # prefix java command with exec to force java being process 1 and receiving docker signals
+    && sed -i 's/^${JAVA_RUN/exec ${JAVA_RUN/'  ${EXIST_HOME}/bin/startup.sh \
+    # clean up apt cache 
+    && rm -rf /var/lib/apt/lists/* \
+    # remove portal webapp
+    && rm -Rf ${EXIST_HOME}/etc/jetty/webapps/portal \
+    # set permissions for the wegajetty user
     && chown -R wegajetty:wegajetty ${EXIST_HOME} \
     && chmod 755 ${EXIST_HOME}/entrypoint.sh
+
 
 # switching to user wegajetty for further copying 
 # and running exist-db 
