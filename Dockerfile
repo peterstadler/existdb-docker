@@ -2,14 +2,15 @@
 #
 # adjusted from https://github.com/jurrian/existdb-alpine
 
-FROM openjdk:8-jre-alpine
+FROM openjdk:8-jre-slim
 MAINTAINER Peter Stadler
 LABEL org.opencontainers.image.source=https://github.com/peterstadler/existdb-docker
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-RUN addgroup -S wegajetty \
-    && adduser -D -S -H -G wegajetty wegajetty \
-    && rm -rf /etc/group- /etc/passwd- /etc/shadow-
+RUN useradd wegajetty
+#RUN addgroup -S wegajetty \
+#    && adduser -D -S -H -G wegajetty wegajetty \
+#    && rm -rf /etc/group- /etc/passwd- /etc/shadow-
 
 ARG VERSION
 ARG MAX_MEMORY
@@ -31,7 +32,8 @@ WORKDIR ${EXIST_HOME}
 ADD ${EXIST_URL} /tmp/exist.jar
 #COPY *.jar /tmp/exist.jar
 
-RUN apk --update add bash pwgen curl \
+RUN apt-get update \
+    && apt-get install -y curl pwgen \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
     && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \
@@ -41,11 +43,10 @@ RUN apk --update add bash pwgen curl \
     && rm -f "/tmp/exist.jar" "/tmp/options.txt" \
     # prefix java command with exec to force java being process 1 and receiving docker signals
     && sed -i 's/^${JAVA_RUN/exec ${JAVA_RUN/'  ${EXIST_HOME}/bin/startup.sh \
-    # alpine has no locale binary, this will fix that
-    && printf "#!/bin/sh\necho $LANG" > /usr/bin/locale \
-    && chmod +x /usr/bin/locale \
+    # clean up apt cache 
+    && rm -rf /var/lib/apt/lists/* \
     # remove portal webapp
-    && rm -Rf ${EXIST_HOME}/etc/jetty/webapps/portal
+    && rm -Rf ${EXIST_HOME}/etc/jetty/webapps/portal 
 
 # adding expath packages to the autodeploy directory
 ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
