@@ -16,7 +16,7 @@ ARG MAX_MEMORY
 ARG EXIST_URL
 ARG SAXON_JAR
 
-ENV VERSION ${VERSION:-5.3.0}
+ENV VERSION ${VERSION:-5.3.1}
 ENV EXIST_URL ${EXIST_URL:-https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar}
 ENV EXIST_HOME /opt/exist
 ENV MAX_MEMORY ${MAX_MEMORY:-2048}

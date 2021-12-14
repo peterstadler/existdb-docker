@@ -17,7 +17,7 @@ env:
   IMAGE_NAME: peterstadler/existdb
   # latest eXist version
   # this will also receive the 'latest' tag
-  LATEST: 5.3.0
+  LATEST: 5.3.1
 
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       matrix:
         include:
           - IMAGE_TAG: 5.3
-            EXIST_VERSION: 5.3.0
+            EXIST_VERSION: 5.3.1
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.3.0/exist-installer-5.3.0.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-7.jar
           - IMAGE_TAG: 5.2
