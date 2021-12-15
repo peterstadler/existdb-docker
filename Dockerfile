@@ -19,6 +19,7 @@ ENV EXIST_ENV ${EXIST_ENV:-development}
 ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
 ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
 ENV SAXON_JAR ${SAXON_JAR:-/opt/exist/lib/Saxon-HE-9.9.1-7.jar}
+ENV LOG4J_FORMAT_MSG_NO_LOOKUPS true
 
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
@@ -38,7 +39,7 @@ COPY log4j2.xml ${EXIST_HOME}/
 
 # main installation put into one RUN to squeeze image size
 RUN apt-get update \
-    && apt-get install -y curl pwgen \
+    && apt-get install -y curl pwgen zip \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
     && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \
@@ -55,7 +56,9 @@ RUN apt-get update \
     && rm -Rf ${EXIST_HOME}/etc/jetty/webapps/portal \
     # set permissions for the wegajetty user
     && chown -R wegajetty:wegajetty ${EXIST_HOME} \
-    && chmod 755 ${EXIST_HOME}/entrypoint.sh
+    && chmod 755 ${EXIST_HOME}/entrypoint.sh \
+    # remove JndiLookup class due to Log4Shell CVE-2021-44228 vulnerability
+    && find ${EXIST_HOME} -name log4j-core-*.jar -exec zip -q -d {} org/apache/logging/log4j/core/lookup/JndiLookup.class \;
 
 
 # switching to user wegajetty for further copying 
