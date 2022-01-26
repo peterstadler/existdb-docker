@@ -19,7 +19,7 @@ env:
   IMAGE_NAME: peterstadler/existdb
   # latest eXist version
   # this will also receive the 'latest' tag
-  LATEST: 5.3.1
+  LATEST: 6.0.0
 
 
 jobs:
@@ -29,14 +29,18 @@ jobs:
     strategy:
       matrix:
         include:
+          - IMAGE_TAG: 6.0
+            EXIST_VERSION: 6.0.0
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.0.0/exist-installer-6.0.0.jar
+            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
+          - IMAGE_TAG: 5.4
+            EXIST_VERSION: 5.4.0
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.4.0/exist-installer-5.4.0.jar
+            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
           - IMAGE_TAG: 5.3
             EXIST_VERSION: 5.3.1
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.3.1/exist-installer-5.3.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-7.jar
-          - IMAGE_TAG: 5.2
-            EXIST_VERSION: 5.2.0
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.2.0/exist-installer-5.2.0.jar
-            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-6.jar
           - IMAGE_TAG: 4
             EXIST_VERSION: 4.10.0
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.10.0/eXist-db-setup-4.10.0.jar
@@ -110,6 +114,6 @@ jobs:
            ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:${{ matrix.IMAGE_TAG }}
            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
            ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:latest
-           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:5
-           ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:5
+           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:6
+           ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:6
          labels: ${{ steps.meta.outputs.labels }}
