@@ -30,12 +30,12 @@ jobs:
       matrix:
         include:
           - IMAGE_TAG: 6.0
-            EXIST_VERSION: 6.0.0
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.0.0/exist-installer-6.0.0.jar
+            EXIST_VERSION: 6.0.1
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.0.1/exist-installer-6.0.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
           - IMAGE_TAG: 5.4
-            EXIST_VERSION: 5.4.0
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.4.0/exist-installer-5.4.0.jar
+            EXIST_VERSION: 5.4.1
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.4.1/exist-installer-5.4.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
           - IMAGE_TAG: 5.3
             EXIST_VERSION: 5.3.1
