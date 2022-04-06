@@ -19,7 +19,7 @@ env:
   IMAGE_NAME: peterstadler/existdb
   # latest eXist version
   # this will also receive the 'latest' tag
-  LATEST: 6.0.0
+  LATEST: 6.0.1
 
 
 jobs:
