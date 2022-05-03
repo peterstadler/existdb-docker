@@ -1,5 +1,5 @@
 # existdb-docker
-This is an [eXist DB](http://exist-db.org/) [docker](https://www.docker.com/) image build on top of an official java-alpine image.
+This is an [eXist DB](http://exist-db.org/) [docker](https://www.docker.com/) image build on top of an official openjdk:8-jre-slim image.
 
 # About this image
 This image is inspired by [davidgaya/docker-eXistDB](https://github.com/davidgaya/docker-eXistDB) 
@@ -11,11 +11,11 @@ particular—so the default settings in eXist's `conf.xml` for whitespace handli
 # How to build
 Navigate into the root directory of this repository and enter:
 ```
-docker build -t existdb --build-arg VERSION=5.2.0 .
+docker build -t existdb --build-arg VERSION=5.3.1 .
 ```
 
 ## available parameters
-* **VERSION**: The eXist version to use. Defaults to 5.2.0
+* **VERSION**: The eXist version to use. Defaults to 5.3.1
 * **MAX_MEMORY**: The max memory setting for eXist. Defaults to 2048 (megabyte). 
    This can be overwritten when starting a container by adding e.g. `-e JAVA_OPTIONS="-Xmx1024m"`    
 * **XAR_REPO_URL**: The repo url to fetch the latest available XARs for the designated eXist-db `$VERSION`. Defaults to https://exist-db.org/exist/apps/public-repo/public.
