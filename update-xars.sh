@@ -121,8 +121,8 @@ echo_help() {
     echo "other files. Theses could interfere when using the directory as autodeploy"
     echo "directory with eXist-db. If you want to prune the directory's contents before"
     echo "copying the newly downloaded XARs, please submit 'prune' as fourth argument."
-    echo 
-    echo 
+    echo
+    echo
     echo "5. \$ ./update-xars.sh -v 5.2.0 -x \"dashboard eXide\" -r https://your-custom-repo-url/public -d ./your/custom/target/directory -p"
     echo "-------------------------------------------------------------------------------------------------------------------------------"
     echo
