@@ -169,10 +169,29 @@ then
     exit
 fi
 
+# create temporary download directory
+echo "Creating temporary download directory at:"
+DIR=`mktemp -d`
+echo "$DIR"
+
 # Set list of package-names to fetch
 if [[ ${#XAR_LIST[@]} == 0 ]]
-then 
-    XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
+then
+    curl -L -o "$DIR"/install.xml https://raw.githubusercontent.com/eXist-db/exist/eXist-"$VERSION"/exist-installer/src/main/izpack/install.xml
+    APP_PACKs_COUNT=$(xmllint --xpath "count(//pack[@parent='Apps']/@name)" "$DIR"/install.xml)
+    XAR_LIST=($(for ((i=1; i<=$APP_PACKs_COUNT; i++)); do
+            name=$(xmllint --xpath 'string(//pack[@parent="Apps"]['"$i"']/@name)' "$DIR"/install.xml)
+            case $name in
+                (exist-function-documentation) echo "fundocs";;
+                (Semver.xq) echo "semver-xq";;
+                (*) echo $name;;
+            esac
+        done)
+    )
+    #for i in $APP_PACKs[@]; do
+    #    echo $i
+    #done
+    #XAR_LIST=(dashboard eXide exist-documentation functx fundocs markdown monex packageservice semver-xq shared)
     echo "Defaulted XAR_LIST to: ${XAR_LIST[*]}"
 fi
 
@@ -182,11 +201,6 @@ then
     REPO_URL=https://exist-db.org/exist/apps/public-repo/public
     echo "Defaulted REPO_URL to: $REPO_URL"
 fi
-
-# create temporary download directory
-echo "Creating temporary download directory at:"
-DIR=`mktemp -d`
-echo "$DIR"
 
 #define function for fetching a given XAR from REPO
 fetch_xar() {
