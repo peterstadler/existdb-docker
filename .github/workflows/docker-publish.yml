@@ -101,7 +101,7 @@ jobs:
 
       - name: Build and push Docker image for latest tag
         if: ${{ matrix.EXIST_VERSION  == env.LATEST }}
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        uses: docker/build-push-action@v3
         with:
          context: .
          build-args: |
@@ -109,6 +109,9 @@ jobs:
            EXIST_URL=${{ matrix.EXIST_URL }}
            SAXON_JAR=${{ matrix.SAXON_JAR }}
          push: ${{ github.event_name != 'pull_request' }}
+         platforms: |
+            linux/amd64
+            linux/arm64
          tags: |
            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.IMAGE_TAG }}
            ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:${{ matrix.IMAGE_TAG }}
