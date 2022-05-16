@@ -29,20 +29,23 @@ jobs:
     strategy:
       matrix:
         include:
-          - IMAGE_TAG: 6.0
-            EXIST_VERSION: 6.0.1
+          - IMAGE_TAG: 
+                - "6"
+                - "6.0"
+                - "latest"
+            EXIST_VERSION: "6.0.1"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.0.1/exist-installer-6.0.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-          - IMAGE_TAG: 5.4
-            EXIST_VERSION: 5.4.1
+          - IMAGE_TAG: "5.4"
+            EXIST_VERSION: "5.4.1"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.4.1/exist-installer-5.4.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-          - IMAGE_TAG: 5.3
-            EXIST_VERSION: 5.3.1
+          - IMAGE_TAG: "5.3"
+            EXIST_VERSION: "5.3.1"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.3.1/exist-installer-5.3.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-7.jar
-          - IMAGE_TAG: 4
-            EXIST_VERSION: 4.10.0
+          - IMAGE_TAG: "4"
+            EXIST_VERSION: "4.10.0"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.10.0/eXist-db-setup-4.10.0.jar
             SAXON_JAR: /opt/exist/lib/endorsed/Saxon-HE-9.6.0-7.jar 
     permissions:
@@ -124,8 +127,4 @@ jobs:
          tags: |
            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.IMAGE_TAG }}
            ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:${{ matrix.IMAGE_TAG }}
-           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-           ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:latest
-           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:6
-           ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:6
          labels: ${{ steps.meta.outputs.labels }}
