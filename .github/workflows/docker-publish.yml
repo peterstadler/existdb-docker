@@ -29,10 +29,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - IMAGE_TAG: 
-                - "6"
-                - "6.0"
-                - "latest"
+          - IMAGE_TAG: ["6","6.0","latest"]
             EXIST_VERSION: "6.0.1"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.0.1/exist-installer-6.0.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
@@ -88,8 +85,7 @@ jobs:
           images: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
             ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb
-          flavor: |
-            latest=${{ github.ref == 'refs/heads/main' }}
+          tags: ${{ matrix.IMAGE_TAG }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -124,7 +120,5 @@ jobs:
          platforms: |
             linux/amd64
             linux/arm64/v8
-         tags: |
-           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ matrix.IMAGE_TAG }}
-           ${{ secrets.PETERS_DOCKERHUB_USERNAME }}/existdb:${{ matrix.IMAGE_TAG }}
+         tags: ${{ steps.meta.outputs.tags }}
          labels: ${{ steps.meta.outputs.labels }}
