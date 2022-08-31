@@ -11,6 +11,7 @@ ${SAXON} -s:${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml -o:/tmp/exi
 ${SAXON} -s:${EXIST_HOME}/etc/webapp/WEB-INF/controller-config.xml -o:/tmp/controller-config.xml
 ${SAXON} -s:${EXIST_HOME}/etc/webapp/WEB-INF/web.xml -o:/tmp/web.xml
 ${SAXON} -s:${EXIST_HOME}/etc/log4j2.xml -o:/tmp/log4j2.xml
+${SAXON} -s:${EXIST_HOME}/etc/jetty/jetty.xml -o:/tmp/jetty.xml
 
 # copying modified configuration files from tmp folder to original destination
 mv /tmp/conf.xml ${EXIST_HOME}/etc/conf.xml
@@ -18,6 +19,7 @@ mv /tmp/exist-webapp-context.xml ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-co
 mv /tmp/controller-config.xml ${EXIST_HOME}/etc/webapp/WEB-INF/controller-config.xml
 mv /tmp/web.xml ${EXIST_HOME}/etc/webapp/WEB-INF/web.xml
 mv /tmp/log4j2.xml ${EXIST_HOME}/etc/log4j2.xml
+mv /tmp/jetty.xml ${EXIST_HOME}/etc/jetty/jetty.xml
 }
 
 ##############################################

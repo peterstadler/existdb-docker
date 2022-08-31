@@ -4,7 +4,7 @@
     xmlns:exist="http://exist.sourceforge.net/NS/exist"
     xmlns:log4j="http://jakarta.apache.org/log4j/"
     xmlns:webapp="http://xmlns.jcp.org/xml/ns/javaee"
-    exclude-result-prefixes="xs"
+    exclude-result-prefixes="xs exist log4j webapp"
     version="2.0">
     
     <!--
@@ -25,17 +25,33 @@
         'XQueryServlet',
         'XQueryURLRewrite'
         )"/>
-    
+
+    <!-- 
+        copy over DOCTYPE instructions
+        adopted from https://stackoverflow.com/questions/51432291/copy-entire-doctype-tag-from-input-document-using-xslt-2-0
+    -->
     <xsl:template match="/">
+        <xsl:variable name="unparsed-text">
+            <xsl:value-of disable-output-escaping="yes" 
+                select="unparsed-text(base-uri())"/>
+        </xsl:variable>
+        <xsl:if test="matches($unparsed-text, '.*?(\n?&lt;!DOCTYPE\s.*?>).*')">
+            <xsl:value-of disable-output-escaping="yes" 
+                select="replace(
+                $unparsed-text, 
+                '.*?(\n?&lt;!DOCTYPE\s.*?>).*', 
+                '$1', 
+                's')"/>
+        </xsl:if>
         <xsl:apply-templates/>
     </xsl:template>
-    
+
     <xsl:template match="node()|@*">
         <xsl:copy>
             <xsl:apply-templates select="node()|@*"/>
         </xsl:copy>
     </xsl:template>
-    
+
     <!-- 
         +++++++++++++++++++++++++++++++++++++++++
         $exist.home$/conf.xml
@@ -154,5 +170,24 @@
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
-    
+
+    <!-- 
+        +++++++++++++++++++++++++++++++++++++++++
+        $exist.home$/etc/jetty/jetty.xml
+        +++++++++++++++++++++++++++++++++++++++++
+        
+        add ForwardedRequestCustomizer to the Jetty configuration
+        to properly process the X-Forward-For and related proxy headers
+        https://github.com/peterstadler/existdb-docker/issues/6
+    -->
+
+    <xsl:template match="New[@class='org.eclipse.jetty.server.HttpConfiguration']">
+        <xsl:copy>
+            <xsl:apply-templates select="node()|@*"/>
+            <Call name="addCustomizer">
+                <Arg><New class="org.eclipse.jetty.server.ForwardedRequestCustomizer"/></Arg>
+            </Call>
+        </xsl:copy>
+    </xsl:template>
+
 </xsl:stylesheet>
