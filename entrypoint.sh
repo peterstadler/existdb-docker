@@ -6,6 +6,10 @@ SAXON="java ${JAVA_OPTIONS} -jar ${SAXON_JAR} env=${EXIST_ENV} context_path=${EX
 # function for adjusting configuration files for eXist versions >= 5
 ##############################################
 function adjust_config_files_eXist5 {
+# remove DTD references since these were causing troubles
+sed -i '2,3d' ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml
+sed -i '2d' ${EXIST_HOME}/etc/jetty/jetty.xml
+
 ${SAXON} -s:${EXIST_HOME}/etc/conf.xml -o:/tmp/conf.xml 
 ${SAXON} -s:${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml -o:/tmp/exist-webapp-context.xml
 ${SAXON} -s:${EXIST_HOME}/etc/webapp/WEB-INF/controller-config.xml -o:/tmp/controller-config.xml
