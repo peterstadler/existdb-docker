@@ -7,8 +7,16 @@ SAXON="java ${JAVA_OPTIONS} -jar ${SAXON_JAR} env=${EXIST_ENV} context_path=${EX
 ##############################################
 function adjust_config_files_eXist5 {
 # remove DTD references since these were causing troubles
-sed -i '2,3d' ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml
-sed -i '2d' ${EXIST_HOME}/etc/jetty/jetty.xml
+if grep "configure_9_3.dtd" ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml > /dev/null
+then
+  sed -i '2,3d' ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml
+  echo "removed DTD reference from ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml"
+fi
+if grep "configure_9_3.dtd" ${EXIST_HOME}/etc/jetty/jetty.xml > /dev/null
+then
+  sed -i '2d' ${EXIST_HOME}/etc/jetty/jetty.xml
+  echo "removed DTD reference from ${EXIST_HOME}/etc/jetty/jetty.xml"
+fi
 
 ${SAXON} -s:${EXIST_HOME}/etc/conf.xml -o:/tmp/conf.xml 
 ${SAXON} -s:${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml -o:/tmp/exist-webapp-context.xml
@@ -31,7 +39,11 @@ mv /tmp/jetty.xml ${EXIST_HOME}/etc/jetty/jetty.xml
 ##############################################
 function adjust_config_files_eXist4 {
 # remove DTD reference since the URL is broken
-sed -i 2d ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml
+if grep "configure_9_3.dtd" ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml > /dev/null
+then
+  sed -i 2d ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml
+  echo "removed DTD reference from ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml"
+fi
 
 # adjusting configuration files
 ${SAXON} -s:${EXIST_HOME}/conf.xml -o:/tmp/conf.xml 
