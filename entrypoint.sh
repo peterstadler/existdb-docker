@@ -9,12 +9,12 @@ function adjust_config_files_eXist5 {
 # remove DTD references since these were causing troubles
 if grep "configure_9_3.dtd" ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml > /dev/null
 then
-  sed -i '2,3d' ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml
+  sed -i '2,3d' ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml &&
   echo "removed DTD reference from ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml"
 fi
 if grep "configure_9_3.dtd" ${EXIST_HOME}/etc/jetty/jetty.xml > /dev/null
 then
-  sed -i '2d' ${EXIST_HOME}/etc/jetty/jetty.xml
+  sed -i '2d' ${EXIST_HOME}/etc/jetty/jetty.xml &&
   echo "removed DTD reference from ${EXIST_HOME}/etc/jetty/jetty.xml"
 fi
 
@@ -41,7 +41,7 @@ function adjust_config_files_eXist4 {
 # remove DTD reference since the URL is broken
 if grep "configure_9_3.dtd" ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml > /dev/null
 then
-  sed -i 2d ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml
+  sed -i 2d ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml &&
   echo "removed DTD reference from ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml"
 fi
 
