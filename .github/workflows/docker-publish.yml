@@ -36,17 +36,17 @@ jobs:
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
           - IMAGE_TAG: |
                 5
+                5.5
+                5.5.0
+            EXIST_VERSION: "5.5.0"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.5.0/exist-installer-5.5.0.jar
+            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
+          - IMAGE_TAG: |
                 5.4
                 5.4.1
             EXIST_VERSION: "5.4.1"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.4.1/exist-installer-5.4.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-          - IMAGE_TAG: |
-                5.3
-                5.3.1
-            EXIST_VERSION: "5.3.1"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.3.1/exist-installer-5.3.1.jar
-            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-7.jar
           - IMAGE_TAG: |
                 4
                 4.10
