@@ -6,17 +6,10 @@ SAXON="java ${JAVA_OPTIONS} -jar ${SAXON_JAR} env=${EXIST_ENV} context_path=${EX
 # function for adjusting configuration files for eXist versions >= 5
 ##############################################
 function adjust_config_files_eXist5 {
-# remove DTD references since these were causing troubles
-if grep "configure_9_3.dtd" ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml > /dev/null
-then
-  sed -i '2,3d' ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml &&
-  echo "removed DTD reference from ${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml"
-fi
-if grep "configure_9_3.dtd" ${EXIST_HOME}/etc/jetty/jetty.xml > /dev/null
-then
-  sed -i '2d' ${EXIST_HOME}/etc/jetty/jetty.xml &&
-  echo "removed DTD reference from ${EXIST_HOME}/etc/jetty/jetty.xml"
-fi
+# replace http DTD references with https
+# this should be obsolete since eXist versions 4.11.0/5.5.0 but is left here for older versions
+# see https://github.com/eXist-db/exist/pull/4616
+grep -rl "http://www.eclipse.org/jetty/configure_9_3.dtd" . | xargs sed -i 's+http://www.eclipse.org/jetty/configure_9_3.dtd+https://www.eclipse.org/jetty/configure_9_3.dtd+g' 
 
 ${SAXON} -s:${EXIST_HOME}/etc/conf.xml -o:/tmp/conf.xml 
 ${SAXON} -s:${EXIST_HOME}/etc/jetty/webapps/exist-webapp-context.xml -o:/tmp/exist-webapp-context.xml
@@ -38,12 +31,10 @@ mv /tmp/jetty.xml ${EXIST_HOME}/etc/jetty/jetty.xml
 # function for adjusting configuration files for eXist versions < 5
 ##############################################
 function adjust_config_files_eXist4 {
-# remove DTD reference since the URL is broken
-if grep "configure_9_3.dtd" ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml > /dev/null
-then
-  sed -i 2d ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml &&
-  echo "removed DTD reference from ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml"
-fi
+# replace http DTD references with https
+# this should be obsolete since eXist versions 4.11.0/5.5.0 but is left here for older versions
+# see https://github.com/eXist-db/exist/pull/4616
+grep -rl "http://www.eclipse.org/jetty/configure_9_3.dtd" . | xargs sed -i 's+http://www.eclipse.org/jetty/configure_9_3.dtd+https://www.eclipse.org/jetty/configure_9_3.dtd+g'
 
 # adjusting configuration files
 ${SAXON} -s:${EXIST_HOME}/conf.xml -o:/tmp/conf.xml 
