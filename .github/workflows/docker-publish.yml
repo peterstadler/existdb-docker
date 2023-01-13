@@ -49,10 +49,10 @@ jobs:
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
           - IMAGE_TAG: |
                 4
-                4.10
-                4.10.0
-            EXIST_VERSION: "4.10.0"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.10.0/eXist-db-setup-4.10.0.jar
+                4.11
+                4.11.1
+            EXIST_VERSION: "4.11.1"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.11.1/eXist-db-setup-4.11.1.jar
             SAXON_JAR: /opt/exist/lib/endorsed/Saxon-HE-9.6.0-7.jar 
     permissions:
       contents: read
