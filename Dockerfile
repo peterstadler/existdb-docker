@@ -13,7 +13,7 @@ ARG SAXON_JAR
 ARG XAR_REPO_URL
 ARG XAR_NAMES
 
-ENV VERSION ${VERSION:-6.0.0}
+ENV VERSION ${VERSION:-6.2.0}
 ENV EXIST_URL ${EXIST_URL:-https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar}
 ENV EXIST_HOME /opt/exist
 ENV MAX_MEMORY ${MAX_MEMORY:-2048}
