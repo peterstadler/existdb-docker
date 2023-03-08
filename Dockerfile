@@ -10,6 +10,8 @@ ARG VERSION
 ARG MAX_MEMORY
 ARG EXIST_URL
 ARG SAXON_JAR
+ARG XAR_REPO_URL
+ARG XAR_NAMES
 
 ENV VERSION ${VERSION:-6.2.0}
 ENV EXIST_URL ${EXIST_URL:-https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar}
@@ -20,7 +22,8 @@ ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
 ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
 ENV SAXON_JAR ${SAXON_JAR:-/opt/exist/lib/Saxon-HE-9.9.1-8.jar}
 ENV LOG4J_FORMAT_MSG_NO_LOOKUPS true
-
+ENV XAR_REPO_URL ${XAR_REPO_URL}
+ENV XAR_NAMES ${XAR_NAMES}
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN useradd wegajetty
@@ -28,7 +31,10 @@ RUN useradd wegajetty
 WORKDIR ${EXIST_HOME}
 
 # adding expath packages to the autodeploy directory
-ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
+COPY update-xars.sh /tmp/update-xars.sh
+RUN chmod +x /tmp/update-xars.sh
+RUN /tmp/update-xars.sh -v ${VERSION} -d ${EXIST_HOME}/autodeploy/ -r ${XAR_REPO_URL} -x "${XAR_NAMES}" -p
+#COPY *.xar ${EXIST_HOME}/autodeploy/
 
 # adding the entrypoint script
 COPY entrypoint.sh ${EXIST_HOME}/
