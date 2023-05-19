@@ -2,7 +2,7 @@
 #
 # initially based on https://github.com/jurrian/existdb-alpine
 
-FROM openjdk:8-jre-slim
+FROM eclipse-temurin:8-jre
 MAINTAINER Peter Stadler
 LABEL org.opencontainers.image.source=https://github.com/peterstadler/existdb-docker
 
@@ -38,8 +38,9 @@ COPY adjust-conf-files.xsl ${EXIST_HOME}/
 COPY log4j2.xml ${EXIST_HOME}/ 
 
 # main installation put into one RUN to squeeze image size
-RUN apt-get update \
-    && apt-get install -y curl pwgen zip \
+RUN apt update \
+    && apt dist-upgrade -y \
+    && apt install -y curl pwgen zip \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
     && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \
