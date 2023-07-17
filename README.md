@@ -15,9 +15,7 @@ docker build -t existdb --build-arg VERSION=6.2.0 .
 ```
 
 ## available parameters
-* **VERSION**: The eXist version to use. Defaults to 6.2.0
-* **MAX_MEMORY**: The max memory setting for eXist. Defaults to 2048 (megabyte). 
-   This can be overwritten when starting a container by adding e.g. `-e JAVA_OPTIONS="-Xmx1024m"`    
+* **VERSION**: The eXist version to use. Defaults to 6.2.0 
 
 # How to run
 ```
@@ -41,7 +39,17 @@ docker run --rm -it \
     may change this to simply `/` and your default app will repond at `http://localhost:8080/`
 *  **EXIST_DEFAULT_APP_PATH**: the database path to your default app, e.g. `xmldb:exist:///db/apps/WeGA-WebApp`.
     This default app will respond directly at the `$EXIST_CONTEXT_PATH` (while all other apps are still 
-    available at `/apps/`).    
+    available at `/apps/`).
+
+## passing JVM flags to the container
+
+Use the `JAVA_TOOL_OPTIONS` parameter to pass any JVM flags to the 
+container. E.g.
+```
+JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75.0
+```
+This will set the max heap size to 75% of the memory allocated to the Docker 
+container.  
 
 ## setting the admin password
 The admin password can be supplied via the `$EXIST_PASSWORD` environment variable or the equivalent Docker secret `$EXIST_PASSWORD_FILE`. 
