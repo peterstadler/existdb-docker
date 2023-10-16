@@ -30,17 +30,21 @@ WORKDIR ${EXIST_HOME}
 # adding expath packages to the autodeploy directory
 ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
 
-# adding the entrypoint script
-COPY entrypoint.sh ${EXIST_HOME}/
+# adding the entrypoint script and XML catalog
+COPY entrypoint.sh catalog.xml ${EXIST_HOME}/
+COPY configure_9_3.dtd /etc/
 
 # adding some scripts/configuration files for fine tuning
-COPY adjust-conf-files.xsl ${EXIST_HOME}/
-COPY log4j2.xml ${EXIST_HOME}/ 
+COPY adjust-conf-files.xsl log4j2.xml ${EXIST_HOME}/
+
+# can't use the packaged version from libxml-commons-resolver1.1-java
+# for this is compiled with JAVA11 and eXist still runs on JAVA8
+COPY xml-resolver-1.2.jar ${EXIST_HOME}/lib/
 
 # main installation put into one RUN to squeeze image size
-RUN apt update \
-    && apt dist-upgrade -y \
-    && apt install -y curl pwgen zip \
+RUN apt-get update \
+    && apt-get dist-upgrade -y \
+    && apt-get install -y --no-install-recommends curl pwgen zip \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
     && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \

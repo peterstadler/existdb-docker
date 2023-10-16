@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SAXON="java ${JAVA_OPTIONS} -jar ${SAXON_JAR} env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl"
+SAXON="java ${JAVA_OPTIONS} -cp ${SAXON_JAR}:${EXIST_HOME}/lib/xml-resolver-1.2.jar net.sf.saxon.Transform  env=${EXIST_ENV} context_path=${EXIST_CONTEXT_PATH} default_app_path=${EXIST_DEFAULT_APP_PATH} -xsl:${EXIST_HOME}/adjust-conf-files.xsl -catalog:${EXIST_HOME}/catalog.xml"
 
 ##############################################
 # function for adjusting configuration files for eXist versions >= 5
