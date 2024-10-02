@@ -124,6 +124,7 @@ jobs:
       - name: ghcr.io cleanup action
         uses: dataaxiom/ghcr-cleanup-action@v1
         with:
+          package: existdb
           delete-untagged: true
           dry-run: true
           validate: true
