@@ -2,7 +2,7 @@
 #
 # initially based on https://github.com/jurrian/existdb-alpine
 
-FROM eclipse-temurin:8-jre
+FROM eclipse-temurin:17-jre
 LABEL org.opencontainers.image.authors="Peter Stadler"
 LABEL org.opencontainers.image.source="https://github.com/peterstadler/existdb-docker"
 
