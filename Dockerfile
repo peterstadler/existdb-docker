@@ -3,8 +3,8 @@
 # initially based on https://github.com/jurrian/existdb-alpine
 
 FROM eclipse-temurin:8-jre
-MAINTAINER Peter Stadler
-LABEL org.opencontainers.image.source=https://github.com/peterstadler/existdb-docker
+LABEL org.opencontainers.image.authors="Peter Stadler"
+LABEL org.opencontainers.image.source="https://github.com/peterstadler/existdb-docker"
 
 ARG VERSION
 ARG MAX_MEMORY
