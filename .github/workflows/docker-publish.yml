@@ -116,6 +116,7 @@ jobs:
 
   clean:
     name: remove untagged images from Github package registry
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Delete Package Versions
