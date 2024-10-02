@@ -21,7 +21,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -115,6 +114,10 @@ jobs:
          labels: ${{ steps.meta.outputs.labels }}
 
   clean:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: delete
     steps:
       - name: Delete Package Versions
         uses: actions/delete-package-versions@v5.0.0
