@@ -43,16 +43,16 @@ jobs:
           - IMAGE_TAG: |
                 5
                 5.5
-                5.5.1
-            EXIST_VERSION: "5.5.1"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.5.1/exist-installer-5.5.1.jar
+                5.5.2
+            EXIST_VERSION: "5.5.2"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.5.2/exist-installer-5.5.2.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
           - IMAGE_TAG: |
                 4
                 4.11
-                4.11.1
-            EXIST_VERSION: "4.11.1"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.11.1/eXist-db-setup-4.11.1.jar
+                4.11.2
+            EXIST_VERSION: "4.11.2"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.11.2/eXist-db-setup-4.11.2.jar
             SAXON_JAR: /opt/exist/lib/endorsed/Saxon-HE-9.6.0-7.jar 
     permissions:
       contents: read
