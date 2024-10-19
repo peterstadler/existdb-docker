@@ -10,16 +10,19 @@ ARG VERSION
 ARG MAX_MEMORY
 ARG EXIST_URL
 ARG SAXON_JAR
+ARG EXIST_CONTEXT_PATH
+ARG EXIST_DATA_DIR
+ARG EXIST_ENV
 
-ENV VERSION ${VERSION:-6.2.0}
-ENV EXIST_URL ${EXIST_URL:-https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar}
-ENV EXIST_HOME /opt/exist
-ENV MAX_MEMORY ${MAX_MEMORY:-2048}
-ENV EXIST_ENV ${EXIST_ENV:-development}
-ENV EXIST_CONTEXT_PATH ${EXIST_CONTEXT_PATH:-/exist}
-ENV EXIST_DATA_DIR ${EXIST_DATA_DIR:-/opt/exist/data}
-ENV SAXON_JAR ${SAXON_JAR:-/opt/exist/lib/Saxon-HE-9.9.1-8.jar}
-ENV LOG4J_FORMAT_MSG_NO_LOOKUPS true
+ENV VERSION=${VERSION:-6.2.0}
+ENV EXIST_URL=${EXIST_URL:-https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar}
+ENV EXIST_HOME="/opt/exist"
+ENV MAX_MEMORY=${MAX_MEMORY:-2048}
+ENV EXIST_ENV=${EXIST_ENV:-development}
+ENV EXIST_CONTEXT_PATH=${EXIST_CONTEXT_PATH:-/exist}
+ENV EXIST_DATA_DIR=${EXIST_DATA_DIR:-/opt/exist/data}
+ENV SAXON_JAR=${SAXON_JAR:-/opt/exist/lib/Saxon-HE-9.9.1-8.jar}
+ENV LOG4J_FORMAT_MSG_NO_LOOKUPS=true
 
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
