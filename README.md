@@ -1,5 +1,6 @@
 # existdb-docker
-This is an [eXist DB](http://exist-db.org/) [docker](https://www.docker.com/) image build on top of an eclipse-temurin:8-jre image.
+This is an [eXist DB](http://exist-db.org/) [docker](https://www.docker.com/)
+image build on top of an eclipse-temurin:21-jre image.
 
 # About this image
 This image is inspired by [davidgaya/docker-eXistDB](https://github.com/davidgaya/docker-eXistDB) 
