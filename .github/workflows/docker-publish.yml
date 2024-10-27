@@ -28,17 +28,17 @@ jobs:
         include:
           - IMAGE_TAG: |
                 6
-                6.2
-                6.2.0
+                6.3
+                6.3.0
                 latest
             EXIST_VERSION: "6.2.0"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.2.0/exist-installer-6.2.0.jar
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.3.0/exist-installer-6.3.0.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
           - IMAGE_TAG: |
-                6.1
-                6.1.0
-            EXIST_VERSION: "6.1.0"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.1.0/exist-installer-6.1.0.jar
+                6.2
+                6.2.0
+            EXIST_VERSION: "6.2.0"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.2.0/exist-installer-6.2.0.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
           - IMAGE_TAG: |
                 5
