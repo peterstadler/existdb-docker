@@ -14,7 +14,7 @@ ARG EXIST_CONTEXT_PATH
 ARG EXIST_DATA_DIR
 ARG EXIST_ENV
 
-ENV VERSION=${VERSION:-6.2.0}
+ENV VERSION=${VERSION:-6.3.0}
 ENV EXIST_URL=${EXIST_URL:-https://github.com/eXist-db/exist/releases/download/eXist-${VERSION}/exist-installer-${VERSION}.jar}
 ENV EXIST_HOME="/opt/exist"
 ENV MAX_MEMORY=${MAX_MEMORY:-2048}

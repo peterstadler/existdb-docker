@@ -12,11 +12,11 @@ particular—so the default settings in eXist's `conf.xml` for whitespace handli
 # How to build
 Navigate into the root directory of this repository and enter:
 ```
-docker build -t existdb --build-arg VERSION=6.2.0 .
+docker build -t existdb --build-arg VERSION=6.3.0 .
 ```
 
 ## available parameters
-* **VERSION**: The eXist version to use. Defaults to 6.2.0 
+* **VERSION**: The eXist version to use. Defaults to 6.3.0 
 
 # How to run
 ```
