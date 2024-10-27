@@ -35,7 +35,7 @@
             <xsl:value-of disable-output-escaping="yes" 
                 select="unparsed-text(base-uri())"/>
         </xsl:variable>
-        <xsl:if test="matches($unparsed-text, '.*?(\n?&lt;!DOCTYPE\s.*?>).*')">
+        <xsl:if test="matches($unparsed-text, '.*?(\n?&lt;!DOCTYPE\s.*?>).*', 's')">
             <xsl:value-of disable-output-escaping="yes" 
                 select="replace(
                 $unparsed-text, 
