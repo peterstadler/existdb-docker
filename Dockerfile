@@ -34,7 +34,7 @@ WORKDIR ${EXIST_HOME}
 ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
 
 # adding the entrypoint script and XML catalog
-COPY entrypoint.sh catalog.xml ${EXIST_HOME}/
+COPY entrypoint.sh catalog.xml getopt-settings.eXist4.patch ${EXIST_HOME}/
 COPY configure_9_3.dtd /etc/
 
 # adding some scripts/configuration files for fine tuning
@@ -47,7 +47,7 @@ COPY xml-resolver-1.2.jar ${EXIST_HOME}/lib/
 # main installation put into one RUN to squeeze image size
 RUN apt-get update \
     && apt-get dist-upgrade -y \
-    && apt-get install -y --no-install-recommends curl pwgen zip \
+    && apt-get install -y --no-install-recommends curl pwgen zip patch \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
     && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \

@@ -1,0 +1,19 @@
+--- getopt-settings.sh	2024-10-13 17:39:07
++++ getopt-settings.new	2025-01-22 13:43:11
+@@ -90,14 +90,14 @@
+         continue
+ 	    fi
+ 
+-      if [ $OPT == "--forking" ]; then
++      if [[ $OPT == "--forking" ]]; then
+         FORKING=1
+         continue
+       fi
+ 
+       if is_jmx_switch "$OPT"; then
+         found_jmx_opt=1
+-      elif [ $OPT == "--pidfile" ]; then
++      elif [[ $OPT == "--pidfile" ]]; then
+         found_pidfile_opt=1
+       else
+         check_quiet_switch "$OPT";

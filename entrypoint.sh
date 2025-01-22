@@ -43,6 +43,9 @@ ${SAXON} -s:${EXIST_HOME}/webapp/WEB-INF/controller-config.xml -o:/tmp/controlle
 ${SAXON} -s:${EXIST_HOME}/webapp/WEB-INF/web.xml -o:/tmp/web.xml
 ${SAXON} -s:${EXIST_HOME}/log4j2.xml -o:/tmp/log4j2.xml
 
+# patch bin/functions.d/getopt-settings.sh
+patch --silent ${EXIST_HOME}/bin/functions.d/getopt-settings.sh ${EXIST_HOME}/getopt-settings.eXist4.patch
+
 # copying modified configuration files from tmp folder to original destination
 mv /tmp/conf.xml ${EXIST_HOME}/conf.xml
 mv /tmp/exist-webapp-context.xml ${EXIST_HOME}/tools/jetty/webapps/exist-webapp-context.xml
