@@ -2,7 +2,11 @@
 #
 # initially based on https://github.com/jurrian/existdb-alpine
 
-FROM eclipse-temurin:17-jre
+# make base image available as build argument
+# to allow for different JRE versions
+ARG BASE_IMAGE=eclipse-temurin:17-jre
+
+FROM ${BASE_IMAGE}
 LABEL org.opencontainers.image.authors="Peter Stadler"
 LABEL org.opencontainers.image.source="https://github.com/peterstadler/existdb-docker"
 
