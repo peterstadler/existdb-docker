@@ -136,6 +136,7 @@ jobs:
            VERSION=${{ matrix.EXIST_VERSION }}
            EXIST_URL=${{ matrix.EXIST_URL }}
            SAXON_JAR=${{ matrix.SAXON_JAR }}
+           BASE_IMAGE=${{ matrix.BASE_IMAGE }}
          push: ${{ github.event_name != 'pull_request' }}
          platforms: |
             linux/amd64
