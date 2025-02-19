@@ -157,6 +157,18 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="webapp:init-param[webapp:param-name = ('xquery-submission', 'xupdate-submission') and $env ne 'development']">
+        <!-- Deny XQuery submissions and updates via the REST interface -->
+        <xsl:copy>
+            <xsl:element name="param-name" namespace="http://xmlns.jcp.org/xml/ns/javaee">
+                <xsl:value-of select="webapp:param-name"/>
+            </xsl:element>
+            <xsl:element name="param-value" namespace="http://xmlns.jcp.org/xml/ns/javaee">
+                <xsl:text>disabled</xsl:text>
+            </xsl:element>
+        </xsl:copy>
+    </xsl:template>
+    
     <!-- 
         +++++++++++++++++++++++++++++++++++++++++
         $exist.home$/log4j2.xml
