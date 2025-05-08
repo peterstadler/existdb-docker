@@ -28,38 +28,38 @@ jobs:
         include:
           - IMAGE_TAG: |
               6
-              6.3
-              6.3.0
+              6.4
+              6.4.0
               6-jre17
-              6.3-jre17
-              6.3.0-jre17
+              6.4-jre17
+              6.4.0-jre17
               latest
-            EXIST_VERSION: "6.3.0"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.3.0/exist-installer-6.3.0.jar
+            EXIST_VERSION: "6.4.0"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.4.0/exist-installer-6.4.0.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
             BASE_IMAGE: eclipse-temurin:17-jre
           - IMAGE_TAG: |
               6-jre11
+              6.4-jre11
+              6.4.0-jre11
+            EXIST_VERSION: "6.4.0"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.4.0/exist-installer-6.4.0.jar
+            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
+            BASE_IMAGE: eclipse-temurin:11-jre
+          - IMAGE_TAG: |
+              6.3
+              6.3.0
+              6.3-jre17
+              6.3.0-jre17
+            EXIST_VERSION: "6.3.0"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.3.0/exist-installer-6.3.0.jar
+            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
+            BASE_IMAGE: eclipse-temurin:17-jre
+          - IMAGE_TAG: |
               6.3-jre11
               6.3.0-jre11
             EXIST_VERSION: "6.3.0"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.3.0/exist-installer-6.3.0.jar
-            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-            BASE_IMAGE: eclipse-temurin:11-jre
-          - IMAGE_TAG: |
-              6.2
-              6.2.0
-              6.2-jre17
-              6.2.0-jre17
-            EXIST_VERSION: "6.2.0"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.2.0/exist-installer-6.2.0.jar
-            SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-            BASE_IMAGE: eclipse-temurin:17-jre
-          - IMAGE_TAG: |
-              6.2-jre11
-              6.2.0-jre11
-            EXIST_VERSION: "6.2.0"
-            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.2.0/exist-installer-6.2.0.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
             BASE_IMAGE: eclipse-temurin:11-jre
           - IMAGE_TAG: |

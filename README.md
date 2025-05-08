@@ -1,6 +1,6 @@
 # existdb-docker
 This is an [eXist DB](http://exist-db.org/) [docker](https://www.docker.com/)
-image build on top of an eclipse-temurin:17-jre image.
+image built on top of an eclipse-temurin:17-jre image.
 
 # About this image
 This image is inspired by [davidgaya/docker-eXistDB](https://github.com/davidgaya/docker-eXistDB) 
@@ -11,15 +11,15 @@ particular—so the default settings in eXist's `conf.xml` for whitespace handli
 
 # How to build
 Navigate into the root directory of this repository and enter:
-```
-docker build -t existdb --build-arg VERSION=6.3.0 .
+```shell
+docker build -t existdb --build-arg VERSION=6.4.0 .
 ```
 
 ## available parameters
-* **VERSION**: The eXist version to use. Defaults to 6.3.0 
+* **VERSION**: The eXist version to use. Defaults to 6.4.0 
 
 # How to run
-```
+```shell
 docker run --rm -it \
     -p 8080:8080 \
     --name existdb \
@@ -46,7 +46,7 @@ docker run --rm -it \
 
 Use the `JAVA_TOOL_OPTIONS` parameter to pass any JVM flags to the 
 container. E.g.
-```
+```shell
 JAVA_TOOL_OPTIONS: -XX:MaxRAMPercentage=75.0
 ```
 This will set the max heap size to 75% of the memory allocated to the Docker 
@@ -56,7 +56,7 @@ container.
 The admin password can be supplied via the `$EXIST_PASSWORD` environment variable or the equivalent Docker secret `$EXIST_PASSWORD_FILE`. 
 If none of these variables are set (or both contain empty values) a random password will be generated and echoed to the logs.  
 
-```
+```yaml
 # docker-compose.yml
 version: "3.6"
 services:
