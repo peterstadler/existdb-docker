@@ -58,7 +58,6 @@ If none of these variables are set (or both contain empty values) a random passw
 
 ```yaml
 # docker-compose.yml
-version: "3.6"
 services:
   existdb:
     image: stadlerpeter/existdb:latest
