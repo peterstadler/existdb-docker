@@ -31,16 +31,25 @@ docker run --rm -it \
 ```
 
 ## available parameters
-* **EXIST_ENV**: This will toggle the modification of configuration files. 
-    A value of "production" will remove most servlets and will deny direct 
-    access to the REST interface. Default is "development" which will not 
-    alter  
-* **EXIST_CONTEXT_PATH**: The eXist context path. Defaults to `/exist`, 
-    which means you'll find eXist at `http://localhost:8080/exist/` but you 
-    may change this to simply `/` and your default app will repond at `http://localhost:8080/`
-*  **EXIST_DEFAULT_APP_PATH**: the database path to your default app, e.g. `xmldb:exist:///db/apps/WeGA-WebApp`.
-    This default app will respond directly at the `$EXIST_CONTEXT_PATH` (while all other apps are still 
-    available at `/apps/`).
+*  **EXIST_ENV**: This will toggle the modification of configuration files.
+   * "development" will provide all servlets and should only be used in 
+     local development contexts.
+   * "production" will remove most servlets and will deny direct access to 
+      the REST interface for security reasons. 
+   * "restxq" will enable the restxq servlet (only) and make the restxq 
+     endpoint directly available at `EXIST_CONTEXT_PATH`.
+     NB, non-restxq apps (like eXide) are not accessible and will not work.  
+*  **EXIST_CONTEXT_PATH**: The eXist context path. Defaults to `/exist`, 
+   which means you'll find eXist at `http://localhost:8080/exist/`. 
+   You may change this to simply `/` and your default app (or the restxq 
+   endpoint if `EXIST_ENV=restxq`) will respond at 
+   `http://localhost:8080/`
+*  **EXIST_DEFAULT_APP_PATH**: the database path to your default app, e.g. 
+   `xmldb:exist:///db/apps/WeGA-WebApp`.
+   The default app will respond directly at the `$EXIST_CONTEXT_PATH` 
+   (while all other apps are still available at `/apps/`).
+   NB, this doesn't have any effect in combination with `EXIST_ENV=restxq` 
+   since RestXQ triggers are registered independent of the app context.
 
 ## passing JVM flags to the container
 
