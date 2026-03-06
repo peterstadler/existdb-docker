@@ -12,11 +12,11 @@ particular—so the default settings in eXist's `conf.xml` for whitespace handli
 # How to build
 Navigate into the root directory of this repository and enter:
 ```shell
-docker build -t existdb --build-arg VERSION=6.4.0 .
+docker build -t existdb --build-arg VERSION=6.4.1 .
 ```
 
 ## available parameters
-* **VERSION**: The eXist version to use. Defaults to 6.4.0 
+* **VERSION**: The eXist version to use. Defaults to 6.4.1 
 
 # How to run
 ```shell
@@ -62,8 +62,10 @@ This will set the max heap size to 75% of the memory allocated to the Docker
 container.  
 
 ## setting the admin password
-The admin password can be supplied via the `$EXIST_PASSWORD` environment variable or the equivalent Docker secret `$EXIST_PASSWORD_FILE`. 
-If none of these variables are set (or both contain empty values) a random password will be generated and echoed to the logs.  
+The admin password can be supplied via the `$EXIST_PASSWORD` environment 
+variable or the equivalent Docker secret `$EXIST_PASSWORD_FILE`. 
+If none of these variables are set (or both contain empty values),
+a random password will be generated and echoed to the logs.  
 
 ```yaml
 # docker-compose.yml
@@ -71,7 +73,7 @@ services:
   existdb:
     image: stadlerpeter/existdb:latest
     ports: 
-      - 8080:8080
+      - "8080:8080"
     environment: 
       - EXIST_PASSWORD_FILE=/run/secrets/existdb_passwd
     restart: unless-stopped
