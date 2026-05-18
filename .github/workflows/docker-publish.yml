@@ -37,7 +37,7 @@ jobs:
             EXIST_VERSION: "6.4.1"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.4.1/exist-installer-6.4.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-            BASE_IMAGE: eclipse-temurin:17-jre
+            BASE_IMAGE: eclipse-temurin:17-jre-noble
           - IMAGE_TAG: |
               6-jre11
               6.4-jre11
@@ -45,7 +45,7 @@ jobs:
             EXIST_VERSION: "6.4.1"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.4.1/exist-installer-6.4.1.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-            BASE_IMAGE: eclipse-temurin:11-jre
+            BASE_IMAGE: eclipse-temurin:11-jre-noble
           - IMAGE_TAG: |
               6.3
               6.3.0
@@ -54,14 +54,14 @@ jobs:
             EXIST_VERSION: "6.3.0"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.3.0/exist-installer-6.3.0.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-            BASE_IMAGE: eclipse-temurin:17-jre
+            BASE_IMAGE: eclipse-temurin:17-jre-noble
           - IMAGE_TAG: |
               6.3-jre11
               6.3.0-jre11
             EXIST_VERSION: "6.3.0"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-6.3.0/exist-installer-6.3.0.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-            BASE_IMAGE: eclipse-temurin:11-jre
+            BASE_IMAGE: eclipse-temurin:11-jre-noble
           - IMAGE_TAG: |
               5
               5.5
@@ -72,7 +72,7 @@ jobs:
             EXIST_VERSION: "5.5.2"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.5.2/exist-installer-5.5.2.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-            BASE_IMAGE: eclipse-temurin:8-jre
+            BASE_IMAGE: eclipse-temurin:8-jre-noble
           - IMAGE_TAG: |
               4
               4.11
@@ -83,7 +83,7 @@ jobs:
             EXIST_VERSION: "4.11.2"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.11.2/eXist-db-setup-4.11.2.jar
             SAXON_JAR: /opt/exist/lib/endorsed/Saxon-HE-9.6.0-7.jar
-            BASE_IMAGE: eclipse-temurin:8-jre
+            BASE_IMAGE: eclipse-temurin:8-jre-noble
     permissions:
       contents: read
       packages: write
