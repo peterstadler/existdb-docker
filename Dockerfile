@@ -35,7 +35,7 @@ RUN useradd wegajetty
 WORKDIR ${EXIST_HOME}
 
 # adding expath packages to the autodeploy directory
-ADD http://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/ 
+ADD https://exist-db.org/exist/apps/public-repo/public/functx-1.0.1.xar ${EXIST_HOME}/autodeploy/
 
 # adding the entrypoint script and XML catalog
 COPY entrypoint.sh catalog.xml getopt-settings.eXist4.patch ${EXIST_HOME}/
