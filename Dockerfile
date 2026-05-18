@@ -55,21 +55,21 @@ RUN apt-get update \
     && echo "INSTALL_PATH=${EXIST_HOME}" > "/tmp/options.txt" \
     && echo "MAX_MEMORY=${MAX_MEMORY}" >> "/tmp/options.txt" \
     && echo "dataDir=${EXIST_DATA_DIR}" >> "/tmp/options.txt" \
-    # install eXist-db
-    # ending with true because java somehow returns with a non-zero after succesfull installing
+    # install eXist-db \
+    # ending with true because java somehow returns with a non-zero after successful installing \
     && curl -sL ${EXIST_URL} -o /tmp/exist.jar \
-    && java -jar "/tmp/exist.jar" -options "/tmp/options.txt" || true \ 
+    && java -jar "/tmp/exist.jar" -options "/tmp/options.txt" || true \
     && rm -fr "/tmp/exist.jar" "/tmp/options.txt" ${EXIST_DATA_DIR}/* \
-    # prefix java command with exec to force java being process 1 and receiving docker signals
+    # prefix java command with exec to force java being process 1 and receiving docker signals \
     && sed -i 's/^${JAVA_RUN/exec ${JAVA_RUN/'  ${EXIST_HOME}/bin/startup.sh \
-    # clean up apt cache 
+    # clean up apt cache \
     && rm -rf /var/lib/apt/lists/* \
-    # remove portal webapp
+    # remove portal webapp \
     && rm -Rf ${EXIST_HOME}/etc/jetty/webapps/portal \
-    # set permissions for the wegajetty user
+    # set permissions for the wegajetty user \
     && chown -R wegajetty:wegajetty ${EXIST_HOME} \
     && chmod 755 ${EXIST_HOME}/entrypoint.sh \
-    # remove JndiLookup class due to Log4Shell CVE-2021-44228 vulnerability
+    # remove JndiLookup class due to Log4Shell CVE-2021-44228 vulnerability \
     && find ${EXIST_HOME} -name log4j-core-*.jar -exec zip -q -d {} org/apache/logging/log4j/core/lookup/JndiLookup.class \;
 
 
