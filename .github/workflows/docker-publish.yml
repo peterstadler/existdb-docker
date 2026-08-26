@@ -67,23 +67,23 @@ jobs:
               5.5
               5.5.2
               5-jre8
-              5.5-jre8
-              5.5.2-jre8
+              5.5-jre11
+              5.5.2-jre11
             EXIST_VERSION: "5.5.2"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-5.5.2/exist-installer-5.5.2.jar
             SAXON_JAR: /opt/exist/lib/Saxon-HE-9.9.1-8.jar
-            BASE_IMAGE: eclipse-temurin:8-jre-noble
+            BASE_IMAGE: eclipse-temurin:11-jre-noble
           - IMAGE_TAG: |
               4
               4.11
               4.11.2
               4-jre8
-              4.11-jre8
-              4.11.2-jre8
+              4.11-jre11
+              4.11.2-jre11
             EXIST_VERSION: "4.11.2"
             EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-4.11.2/eXist-db-setup-4.11.2.jar
             SAXON_JAR: /opt/exist/lib/endorsed/Saxon-HE-9.6.0-7.jar
-            BASE_IMAGE: eclipse-temurin:8-jre-noble
+            BASE_IMAGE: eclipse-temurin:11-jre-noble
     permissions:
       contents: read
       packages: write
