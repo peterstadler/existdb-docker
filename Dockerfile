@@ -44,10 +44,6 @@ COPY configure_9_3.dtd /etc/
 # adding some scripts/configuration files for fine tuning
 COPY adjust-conf-files.xsl log4j2.xml ${EXIST_HOME}/
 
-# can't use the packaged version from libxml-commons-resolver1.1-java
-# for this is compiled with JAVA11 and eXist still runs on JAVA8
-COPY xml-resolver-1.2.jar ${EXIST_HOME}/lib/
-
 # main installation put into one RUN to squeeze image size
 RUN apt-get update \
     && apt-get dist-upgrade -y \
