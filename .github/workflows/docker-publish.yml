@@ -135,8 +135,9 @@ jobs:
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
-      - name: Build and push Docker image
+      - name: Build and push Docker image with ARM v7 support
         uses: docker/build-push-action@v7
+        if: ${{ matrix.BASE_IMAGE != 'eclipse-temurin:21-jre-noble' }}
         with:
          context: .
          build-args: |
@@ -151,6 +152,23 @@ jobs:
             linux/arm/v7
          tags: ${{ steps.meta.outputs.tags }}
          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push Docker image without ARM v7 support
+        uses: docker/build-push-action@v7
+        if: ${{ matrix.BASE_IMAGE == 'eclipse-temurin:21-jre-noble' }}
+        with:
+          context: .
+          build-args: |
+            VERSION=${{ matrix.EXIST_VERSION }}
+            EXIST_URL=${{ matrix.EXIST_URL }}
+            SAXON_JAR=${{ matrix.SAXON_JAR }}
+            BASE_IMAGE=${{ matrix.BASE_IMAGE }}
+          push: ${{ github.event_name != 'pull_request' }}
+          platforms: |
+            linux/amd64
+            linux/arm64/v8
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
 
   clean:
     name: remove untagged images from Github package registry
