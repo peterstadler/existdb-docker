@@ -27,6 +27,13 @@ jobs:
       matrix:
         include:
           - IMAGE_TAG: |
+              7.0.0-beta5
+              7.0.0-beta5-jre21
+            EXIST_VERSION: "7.0.0-beta5"
+            EXIST_URL: https://github.com/eXist-db/exist/releases/download/eXist-7.0.0-beta5/exist-installer-7.0.0-beta5.jar
+            SAXON_JAR: /opt/exist/lib/Saxon-HE-12.5.jar
+            BASE_IMAGE: eclipse-temurin:21-jre-noble
+          - IMAGE_TAG: |
               6
               6.4
               6.4.1
