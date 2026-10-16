@@ -26,8 +26,8 @@ docker run --rm -it \
     -v /your/path/to/exist-data:/opt/exist/data \
     -v /your/path/to/exist-logs:/opt/exist/logs \
     -e EXIST_ENV=development \
-    -e EXIST_CONTEXT_PATH=/exist \    
-    stadlerpeter/existdb:latest    
+    -e EXIST_CONTEXT_PATH=/exist \
+    stadlerpeter/existdb:latest
 ```
 
 ## available parameters
